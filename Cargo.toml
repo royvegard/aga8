@@ -1,14 +1,20 @@
 [package]
 name = "aga8"
-description = "AGA8 equations of state"
+description = "AGA8 and GERG2008 equations of state"
 version = "0.1.0"
 authors = ["Roy Vegard Ovesen <roy.vegard.ovesen@gmail.com>"]
 edition = "2018"
 repository = "https://github.com/royvegard/AGA8/tree/rust_ffi_changes/AGA8CODE/RUST"
 readme = "README.md"
 
+[package.metadata.winres]
+OriginalFilename = "aga8.dll"
+
 [lib]
 name = "aga8"
 crate-type = ["rlib", "staticlib", "cdylib"]
 
 [dependencies]
+
+[build-dependencies]
+winres = "0.1"
