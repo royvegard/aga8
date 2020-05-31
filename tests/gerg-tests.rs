@@ -52,7 +52,49 @@ fn gerg_api_call() {
 
     unsafe {
         let result = aga8::gerg_2008(&composition[0], pressure, temperature);
-
         assert!(f64::abs(result.d - 12.798_286_260_820_62) < 1.0e-10);
+    }
+}
+
+#[test]
+fn gerg_test_01() {
+    let mut gerg_test: aga8::Gerg2008 = aga8::Gerg2008::new();
+
+    gerg_test.setup();
+    
+    gerg_test.x = [0.0,
+        0.965, 0.003, 0.006, 0.018, 0.0045, 0.001, 0.001, 0.0005, 0.0003, 0.0007,
+        0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
+    ];
+
+    gerg_test.t = 18.0 + 273.15;
+    gerg_test.p = 14601.325;
+
+    gerg_test.density(0);
+    gerg_test.properties();
+
+    println!("{}", gerg_test.d);
+    println!("{}", gerg_test.mm);
+    println!("{}", gerg_test.d * gerg_test.mm);
+
+    assert!(f64::abs(gerg_test.d - 7.730_483_295_277_388) < 1.0e-10);
+    assert!(f64::abs(gerg_test.mm - 16.803_030_286) < 1.0e-10);
+}
+
+#[test]
+
+fn gerg_api_test_01() {
+    let composition: [f64; 21] = [
+        0.965, 0.003, 0.006, 0.018, 0.0045, 0.001, 0.001, 0.0005, 0.0003, 0.0007,
+        0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
+    ];
+
+    let temperature = 18.0 + 273.15;
+    let pressure = 14601.325;
+
+    unsafe {
+        let result = aga8::gerg_2008(&composition[0], pressure, temperature);
+
+        assert!(f64::abs(result.d - 7.730_483_295_277_388) < 1.0e-10);
     }
 }
