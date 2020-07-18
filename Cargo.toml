@@ -16,5 +16,12 @@ crate-type = ["rlib", "staticlib", "cdylib"]
 
 [dependencies]
 
+[dev-dependencies]
+criterion = "0.3"
+
+[[bench]]
+name = "benchmarks"
+harness = false
+
 [build-dependencies]
 winres = "0.1"
