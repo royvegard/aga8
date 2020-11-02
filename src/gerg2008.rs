@@ -2339,8 +2339,6 @@ pub struct Gerg2008 {
     gtij: [[f64; MAXFLDS + 1]; MAXFLDS + 1],
 }
 
-#[allow(clippy::needless_range_loop)]
-
 impl Gerg2008 {
     pub fn new() -> Self {
         Default::default()
@@ -4557,7 +4555,7 @@ impl Gerg2008 {
         }
     }
 
-    fn pseudocriticalpoint(&mut self) -> (f64, f64) {
+    fn pseudocriticalpoint(&self) -> (f64, f64) {
         let mut dcx = 0.0;
         let mut tcx = 0.0;
         let mut vcx: f64 = 0.0;
