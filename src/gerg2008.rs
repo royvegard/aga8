@@ -2289,6 +2289,7 @@ const GTIJ: [[f64; MAXFLDS + 1]; MAXFLDS + 1] = [
 
 /// Implements the GERG2008 equation of state described in
 /// AGA Report No. 8, Part 2, First Edition, April 2017.
+#[derive(Default)]
 pub struct Gerg2008 {
     pub dp_dd: f64,
     pub d2p_dd2: f64,
@@ -2337,59 +2338,6 @@ pub struct Gerg2008 {
     btij: [[f64; MAXFLDS + 1]; MAXFLDS + 1],
     gtij: [[f64; MAXFLDS + 1]; MAXFLDS + 1],
 }
-
-impl Default for Gerg2008 {
-    fn default() -> Self {
-        Gerg2008 {
-            dp_dd: 0.0,
-            d2p_dd2: 0.0,
-            d2p_dtd: 0.0,
-            dp_dt: 0.0,
-            u: 0.0,
-            h: 0.0,
-            s: 0.0,
-            cv: 0.0,
-            cp: 0.0,
-            w: 0.0,
-            g: 0.0,
-            jt: 0.0,
-            kappa: 0.0,
-            a: 0.0,
-            mm: 0.0,
-            t: 0.0,
-            p: 0.0,
-            d: 0.0,
-            z: 0.0,
-            x: [0.0; NC_GERG + 1],
-            xold: [0.0; NC_GERG + 1],
-            told: 0.0,
-            a0: [0.0; 3],
-            ar: [[0.0; 4]; 4],
-            dpddsave: 0.0,
-            drold: 0.0,
-            trold: 0.0,
-            trold2: 0.0,
-            taup: [[0.0; MAXTRMP + 1]; MAXFLDS + 1],
-            taupijk: [[0.0; MAXTRMM + 1]; MAXFLDS + 1],
-            coik: [[0; MAXTRMP + 1]; MAXFLDS + 1],
-            doik: [[0; MAXTRMP + 1]; MAXFLDS + 1],
-            toik: [[0.0; MAXTRMP + 1]; MAXFLDS + 1],
-            dijk: [[0; MAXTRMM + 1]; MAXTRMM + 1],
-            tijk: [[0.0; MAXTRMM + 1]; MAXMDL + 1],
-            cijk: [[0.0; MAXTRMM + 1]; MAXMDL + 1],
-            eijk: [[0.0; MAXTRMM + 1]; MAXMDL + 1],
-            gijk: [[0.0; MAXTRMM + 1]; MAXMDL + 1],
-            nijk: [[0.0; MAXTRMM + 1]; MAXMDL + 1],
-            n0i: [[0.0; 7 + 1]; MAXFLDS + 1],
-            bvij: [[0.0; MAXFLDS + 1]; MAXFLDS + 1],
-            gvij: [[0.0; MAXFLDS + 1]; MAXFLDS + 1],
-            btij: [[0.0; MAXFLDS + 1]; MAXFLDS + 1],
-            gtij: [[0.0; MAXFLDS + 1]; MAXFLDS + 1],
-        }
-    }
-}
-
-#[allow(clippy::needless_range_loop)]
 
 impl Gerg2008 {
     pub fn new() -> Self {
@@ -4607,7 +4555,7 @@ impl Gerg2008 {
         }
     }
 
-    fn pseudocriticalpoint(&mut self) -> (f64, f64) {
+    fn pseudocriticalpoint(&self) -> (f64, f64) {
         let mut dcx = 0.0;
         let mut tcx = 0.0;
         let mut vcx: f64 = 0.0;
