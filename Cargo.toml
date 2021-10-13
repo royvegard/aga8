@@ -4,7 +4,8 @@ description = "AGA8 and GERG2008 equations of state"
 version = "0.1.0"
 authors = ["Roy Vegard Ovesen <roy.vegard.ovesen@gmail.com>"]
 edition = "2018"
-repository = "https://github.com/royvegard/AGA8/tree/rust_ffi_changes/AGA8CODE/RUST"
+repository = "https://github.com/usnistgov/AGA8"
+license-file = "LICENSE"
 readme = "README.md"
 
 [package.metadata.winres]
