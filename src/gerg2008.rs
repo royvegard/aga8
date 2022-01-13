@@ -2291,25 +2291,47 @@ const GTIJ: [[f64; MAXFLDS + 1]; MAXFLDS + 1] = [
 /// AGA Report No. 8, Part 2, First Edition, April 2017.
 #[derive(Default)]
 pub struct Gerg2008 {
-    pub dp_dd: f64,
-    pub d2p_dd2: f64,
-    pub d2p_dtd: f64,
-    pub dp_dt: f64,
-    pub u: f64,
-    pub h: f64,
-    pub s: f64,
-    pub cv: f64,
-    pub cp: f64,
-    pub w: f64,
-    pub g: f64,
-    pub jt: f64,
-    pub kappa: f64,
-    pub a: f64,
-    pub mm: f64,
+    /// Temperature [K]
     pub t: f64,
+    /// Pressure [kPa]
     pub p: f64,
+    /// Molar concentration [mol/l]
     pub d: f64,
+    /// Compressibility factor [-]
     pub z: f64,
+    /// Molar mass [g/mol]
+    pub mm: f64,
+    /// First derivative of pressure with respect
+    /// to density at constant temperature [kPa/(mol/l)]
+    pub dp_dd: f64,
+    /// Second derivative of pressure with respect
+    /// to density at constant temperature [kPa/(mol/l)^2]
+    pub d2p_dd2: f64,
+    /// Second derivative of pressure with respect to
+    /// temperature and density [kPa/(mol/l)/K] (currently not calculated)
+    pub d2p_dtd: f64,
+    /// First derivative of pressure with respect to
+    /// temperature at constant density [kPa/K]
+    pub dp_dt: f64,
+    /// Internal energy [J/mol]
+    pub u: f64,
+    /// Enthalpy [J/mol]
+    pub h: f64,
+    /// Entropy [J/(mol-K)]
+    pub s: f64,
+    /// Isochoric heat capacity [J/(mol-K)]
+    pub cv: f64,
+    /// Isobaric heat capacity [J/(mol-K)]
+    pub cp: f64,
+    /// Speed of sound [m/s]
+    pub w: f64,
+    /// Gibbs energy [J/mol]
+    pub g: f64,
+    /// Joule-Thomson coefficient [K/kPa]
+    pub jt: f64,
+    /// Isentropic Exponent
+    pub kappa: f64,
+    /// Composition [mole fraction]
     pub x: [f64; NC_GERG + 1],
 
     drold: f64,
@@ -2317,6 +2339,7 @@ pub struct Gerg2008 {
     told: f64,
     trold2: f64,
     xold: [f64; NC_GERG + 1],
+    a: f64,
     a0: [f64; 3],
     ar: [[f64; 4]; 4],
     dpddsave: f64,

@@ -10,22 +10,41 @@ pub use crate::gerg2008::Gerg2008;
 
 use std::slice;
 
+/// Return type
 #[repr(C)]
 pub struct Properties {
-    pub d: f64, // Molar concentration [mol/l]
+    /// Molar concentration [mol/l]
+    pub d: f64,
+    /// Molar mass [g/mol]
     pub mm: f64,
+    /// Compressibility factor [-]
     pub z: f64,
+    /// First derivative of pressure with respect
+    /// to density at constant temperature [kPa/(mol/l)]
     pub dp_dd: f64,
+    /// Second derivative of pressure with respect to
+    /// temperature and density [kPa/(mol/l)/K] (currently not calculated)
     pub d2p_dd2: f64,
+    /// First derivative of pressure with respect to
+    /// temperature at constant density [kPa/K]
     pub dp_dt: f64,
+    /// Internal energy [J/mol]
     pub u: f64,
+    /// Enthalpy [J/mol]
     pub h: f64,
+    /// Entropy [J/(mol-K)]
     pub s: f64,
+    /// Isochoric heat capacity [J/(mol-K)]
     pub cv: f64,
+    /// Isobaric heat capacity [J/(mol-K)]
     pub cp: f64,
+    /// Speed of sound [m/s]
     pub w: f64,
+    /// Gibbs energy [J/mol]
     pub g: f64,
+    /// Joule-Thomson coefficient [K/kPa]
     pub jt: f64,
+    /// Isentropic Exponent
     pub kappa: f64,
 }
 
@@ -268,11 +287,15 @@ pub unsafe extern "C" fn gerg_2008(
     }
 }
 
+/// Create a Gerg2008 type
+///
 #[no_mangle]
 pub extern "C" fn gerg_new() -> *mut Gerg2008 {
     Box::into_raw(Box::new(Gerg2008::new()))
 }
 
+/// Frees the memory used by the Gerg2008 type
+///
 /// # Safety
 ///
 #[no_mangle]
@@ -391,8 +414,10 @@ pub unsafe extern "C" fn gerg_calculate_pressure(ptr: *mut Gerg2008) {
     gerg.pressure();
 }
 
-/// # Safety
+/// Calculates the density
 ///
+/// # Safety
+/// 
 #[no_mangle]
 pub unsafe extern "C" fn gerg_calculate_density(ptr: *mut Gerg2008) {
     assert!(!ptr.is_null());
