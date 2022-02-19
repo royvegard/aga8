@@ -4,7 +4,7 @@ The main difference from the other implementations is that it puts
 the data into a struct `AGA8Detail`, and puts the functions as
 methods under that struct.
 
-[![Build Status](https://travis-ci.org/royvegard/AGA8.svg?branch=master)](https://travis-ci.org/royvegard/AGA8)
+[![Rust](https://github.com/royvegard/aga8/actions/workflows/rust.yml/badge.svg)](https://github.com/royvegard/aga8/actions/workflows/rust.yml)
 
 ## Building
 Use cargo:
