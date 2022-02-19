@@ -959,8 +959,8 @@ impl Detail {
         const D0: f64 = 101.325 / RDETAIL / 298.15;
 
         for i in 0..MAXFLDS {
-            self.n0i[i][2] = self.n0i[i][2] - 1.0;
-            self.n0i[i][0] = self.n0i[i][0] - f64::ln(D0);
+            self.n0i[i][2] -= 1.0;
+            self.n0i[i][0] -= f64::ln(D0);
         }
     }
 
@@ -1296,7 +1296,7 @@ impl Detail {
         plog = f64::ln(self.p);
         vlog = -f64::ln(self.d);
         for _it in 0..20 {
-            if vlog < -7.0 || vlog > 100.0 {
+            if !(-7.0..=100.0).contains(&vlog) {
                 //ierr = 1; herr = "Calculation failed to converge in DETAIL method, ideal gas density returned.";
                 self.d = self.p / RDETAIL / self.t;
                 return self.d;

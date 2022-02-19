@@ -64,7 +64,7 @@ pub unsafe extern "C" fn aga8_2017(
     let mut aga8_test: Detail = Detail::new();
     aga8_test.setup();
 
-    aga8_test.x[0..detail::NC_DETAIL].clone_from_slice(&array[..]);
+    aga8_test.x[0..detail::NC_DETAIL].clone_from_slice(array);
 
     aga8_test.t = temperature;
     aga8_test.p = pressure;
@@ -122,7 +122,7 @@ pub unsafe extern "C" fn aga8_set_composition(ptr: *mut Detail, composition: *co
     assert!(!composition.is_null());
     let aga8 = &mut *ptr;
     let array = slice::from_raw_parts(composition, detail::NC_DETAIL);
-    aga8.x[0..detail::NC_DETAIL].clone_from_slice(&array[..]);
+    aga8.x[0..detail::NC_DETAIL].clone_from_slice(array);
 }
 
 /// # Safety
@@ -262,7 +262,7 @@ pub unsafe extern "C" fn gerg_2008(
     let mut gerg_test: Gerg2008 = Gerg2008::new();
     gerg_test.setup();
 
-    gerg_test.x[1..=detail::NC_DETAIL].clone_from_slice(&array[..]);
+    gerg_test.x[1..=detail::NC_DETAIL].clone_from_slice(array);
     gerg_test.t = temperature;
     gerg_test.p = pressure;
     gerg_test.density(0);
@@ -323,7 +323,7 @@ pub unsafe extern "C" fn gerg_set_composition(ptr: *mut Gerg2008, composition: *
     assert!(!composition.is_null());
     let gerg = &mut *ptr;
     let array = slice::from_raw_parts(composition, detail::NC_DETAIL);
-    gerg.x[1..=detail::NC_DETAIL].clone_from_slice(&array[..]);
+    gerg.x[1..=detail::NC_DETAIL].clone_from_slice(array);
 }
 
 /// # Safety
@@ -417,7 +417,7 @@ pub unsafe extern "C" fn gerg_calculate_pressure(ptr: *mut Gerg2008) {
 /// Calculates the density
 ///
 /// # Safety
-/// 
+///
 #[no_mangle]
 pub unsafe extern "C" fn gerg_calculate_density(ptr: *mut Gerg2008) {
     assert!(!ptr.is_null());

@@ -4191,7 +4191,7 @@ impl Gerg2008 {
         let mut vlog = -f64::ln(self.d);
 
         for it in 1..=50 {
-            if vlog < -7.0 || vlog > 100.0 || it == 20 || it == 30 || it == 40 || ifail == 1 {
+            if !(-7.0..=100.0).contains(&vlog) || it == 20 || it == 30 || it == 40 || ifail == 1 {
                 //Current state is bad or iteration is taking too long.  Restart with completely different initial state
                 ifail = 0;
                 if nfail > 2 {
