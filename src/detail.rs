@@ -1103,9 +1103,9 @@ impl Detail {
         }
         logt = f64::ln(self.t);
 
-        for i in 0..NC_DETAIL {
-            if self.x[i] > 0.0 {
-                logxd = logd + f64::ln(self.x[i]);
+        for (i, x) in self.x.iter().enumerate() {
+            if x > &0.0 {
+                logxd = logd + f64::ln(*x);
                 sumhyp0 = 0.0;
                 sumhyp1 = 0.0;
                 sumhyp2 = 0.0;
@@ -1131,12 +1131,12 @@ impl Detail {
                         }
                     }
                 }
-                self.a0[0] += self.x[i]
+                self.a0[0] += x
                     * (logxd + self.n0i[i][0] + self.n0i[i][1] / self.t - self.n0i[i][2] * logt
                         + sumhyp0);
                 self.a0[1] +=
-                    self.x[i] * (logxd + self.n0i[i][0] - self.n0i[i][2] * (1.0 + logt) + sumhyp1);
-                self.a0[2] += -self.x[i] * (self.n0i[i][2] + sumhyp2);
+                    x * (logxd + self.n0i[i][0] - self.n0i[i][2] * (1.0 + logt) + sumhyp1);
+                self.a0[2] += -x * (self.n0i[i][2] + sumhyp2);
             }
         }
         self.a0[0] = self.a0[0] * RDETAIL * self.t;

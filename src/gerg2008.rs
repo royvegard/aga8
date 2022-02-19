@@ -4130,11 +4130,11 @@ impl Gerg2008 {
             }
         }
 
-        for i in 1..=MAXMDL {
-            for j in 1..=MAXTRMM {
+        for (i, bijki) in bijk.iter().enumerate().skip(1) {
+            for (j, bijkij) in bijki.iter().enumerate().skip(1) {
                 self.gijk[i][j] =
-                    -self.cijk[i][j] * f64::powi(self.eijk[i][j], 2) + bijk[i][j] * self.gijk[i][j];
-                self.eijk[i][j] = 2.0 * self.cijk[i][j] * self.eijk[i][j] - bijk[i][j];
+                    -self.cijk[i][j] * f64::powi(self.eijk[i][j], 2) + bijkij * self.gijk[i][j];
+                self.eijk[i][j] = 2.0 * self.cijk[i][j] * self.eijk[i][j] - bijkij;
                 self.cijk[i][j] = -self.cijk[i][j];
             }
         }
@@ -4154,8 +4154,8 @@ impl Gerg2008 {
 
     pub fn molarmass(&mut self) {
         self.mm = 0.0;
-        for i in 1..=NC_GERG {
-            self.mm += self.x[i] * MMI_GERG[i];
+        for (i, mmi_gerg) in MMI_GERG.iter().enumerate().skip(1) {
+            self.mm += self.x[i] * mmi_gerg;
         }
     }
 
@@ -4171,10 +4171,6 @@ impl Gerg2008 {
         let mut nfail: i32 = 0;
         let mut ifail: i32 = 0;
         const TOLR: f64 = 0.000_000_1;
-
-        if self.d < EPSILON {
-            self.d = 0.0;
-        }
 
         let (dcx, _tcx) = self.pseudocriticalpoint();
 
@@ -4362,15 +4358,15 @@ impl Gerg2008 {
             logd = f64::ln(EPSILON);
         }
         logt = f64::ln(self.t);
-        for i in 1..=NC_GERG {
+        for (i, th0i) in TH0I.iter().enumerate().skip(1) {
             if self.x[i] > EPSILON {
                 logxd = logd + f64::ln(self.x[i]);
                 sumhyp0 = 0.0;
                 sumhyp1 = 0.0;
                 sumhyp2 = 0.0;
-                for j in 4..8 {
-                    if TH0I[i][j] > EPSILON {
-                        th0t = TH0I[i][j] / self.t;
+                for (j, th0ij) in th0i.iter().enumerate().take(8).skip(4) {
+                    if th0ij > &EPSILON {
+                        th0t = th0ij / self.t;
                         ep = f64::exp(th0t);
                         em = 1.0 / ep;
                         hsn = (ep - em) / 2.0;
@@ -4544,14 +4540,14 @@ impl Gerg2008 {
         let mut taup0: [f64; 12 + 1] = [0.0; 12 + 1];
 
         //i = 5;  // Use propane to get exponents for short form of EOS
-        for k in 1..=KPOL[i] + KEXP[i] {
-            taup0[k] = f64::exp(self.toik[i][k] * lntau);
+        for (k, taup) in taup0.iter_mut().enumerate().skip(1) {
+            *taup = f64::exp(self.toik[i][k] * lntau);
         }
         for i in 1..=NC_GERG {
             if self.x[i] > EPSILON {
                 if i > 4 && i != 15 && i != 18 && i != 20 {
-                    for k in 1..=KPOL[i] + KEXP[i] {
-                        self.taup[i][k] = NOIK[i][k] * taup0[k];
+                    for (k, taup) in taup0.iter().enumerate().skip(1) {
+                        self.taup[i][k] = NOIK[i][k] * taup;
                     }
                 } else {
                     for k in 1..=KPOL[i] + KEXP[i] {
@@ -4561,11 +4557,11 @@ impl Gerg2008 {
             }
         }
 
-        for i in 1..NC_GERG {
+        for (i, mnumbi) in MNUMB.iter().enumerate().skip(1) {
             if self.x[i] > EPSILON {
-                for j in i + 1..=NC_GERG {
+                for (j, mnumbij) in mnumbi.iter().enumerate().skip(i + 1) {
                     if self.x[j] > EPSILON {
-                        let mn = MNUMB[i][j];
+                        let mn = *mnumbij;
                         if mn > 0 {
                             for k in 1..=KPOLIJ[mn] {
                                 self.taupijk[mn][k] =
