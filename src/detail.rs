@@ -649,7 +649,7 @@ const TH0I: [[f64; 7]; MAXFLDS] = [
 /// // output properties mentioned below
 /// aga8_test.properties_detail();
 ///
-/// assert!(f64::abs(12.807_924_036_488_01 - aga8_test.d) < 1.0e-10);
+/// assert!((12.807_924_036_488_01 - aga8_test.d).abs() < 1.0e-10);
 /// ```
 
 pub struct Detail {
@@ -945,12 +945,12 @@ impl Detail {
                         bsnij = bsnij * WI[i] * WI[j];
                     }
                     self.bsnij2[i][j][n] = AN[n]
-                        * f64::powf(EIJ[i][j] * f64::sqrt(EI[i] * EI[j]), UN[n])
-                        * f64::powf(KI[i] * KI[j], 1.5)
+                        * (EIJ[i][j] * (EI[i] * EI[j]).sqrt()).powf(UN[n])
+                        * (KI[i] * KI[j]).powf(1.5)
                         * bsnij;
                 }
-                self.kij5[i][j] = (f64::powi(KIJ[i][j], 5) - 1.0) * self.ki25[i] * self.ki25[j];
-                self.uij5[i][j] = (f64::powi(UIJ[i][j], 5) - 1.0) * self.ei25[i] * self.ei25[j];
+                self.kij5[i][j] = (KIJ[i][j].powi(5) - 1.0) * self.ki25[i] * self.ki25[j];
+                self.uij5[i][j] = (UIJ[i][j].powi(5) - 1.0) * self.ei25[i] * self.ei25[j];
                 self.gij5[i][j] = (GIJ[i][j] - 1.0) * (GI[i] + GI[j]) / 2.0;
             }
         }
@@ -960,7 +960,7 @@ impl Detail {
 
         for i in 0..MAXFLDS {
             self.n0i[i][2] -= 1.0;
-            self.n0i[i][0] -= f64::ln(D0);
+            self.n0i[i][0] -= D0.ln();
         }
     }
 
@@ -991,11 +991,11 @@ impl Detail {
         // Check to see if a component fraction has changed.  If x is the same as the previous call, then exit.
         icheck = 0;
 
-        for i in 0..NC_DETAIL {
-            if f64::abs(self.x[i] - self.xold[i]) > 0.000_000_1 {
+        for (i, x) in self.x.iter().enumerate() {
+            if (x - self.xold[i]).abs() > 0.000_000_1 {
                 icheck = 1;
             }
-            self.xold[i] = self.x[i];
+            self.xold[i] = *x;
         }
         if icheck == 0 {
             return;
@@ -1011,13 +1011,13 @@ impl Detail {
         }
 
         // Calculate pure fluid contributions
-        for i in 0..NC_DETAIL {
-            if self.x[i] > 0.0 {
-                xi2 = f64::powi(self.x[i], 2);
-                self.k3 += self.x[i] * self.ki25[i]; // K, U, and G are the sums of a pure fluid contribution and a
-                u += self.x[i] * self.ei25[i]; // binary pair contribution
-                g += self.x[i] * GI[i];
-                q += self.x[i] * QI[i]; // Q and F depend only on the pure fluid parts
+        for (i, x) in self.x.iter().enumerate() {
+            if x > &0.0 {
+                xi2 = x.powi(2);
+                self.k3 += x * self.ki25[i]; // K, U, and G are the sums of a pure fluid contribution and a
+                u += x * self.ei25[i]; // binary pair contribution
+                g += x * GI[i];
+                q += x * QI[i]; // Q and F depend only on the pure fluid parts
                 f += xi2 * FI[i];
 
                 for n in 0..18 {
@@ -1025,15 +1025,15 @@ impl Detail {
                 }
             }
         }
-        self.k3 = f64::powi(self.k3, 2);
-        u = f64::powi(u, 2);
+        self.k3 = self.k3.powi(2);
+        u = u.powi(2);
 
         // Binary pair contributions
-        for i in 0..NC_DETAIL {
-            if self.x[i] > 0.0 {
-                for j in i + 1..NC_DETAIL {
-                    if self.x[j] > 0.0 {
-                        xij = 2.0 * self.x[i] * self.x[j];
+        for (i, xi) in self.x.iter().enumerate() {
+            if xi > &0.0 {
+                for (j, xj) in self.x.iter().enumerate().skip(i + 1) {
+                    if xj > &0.0 {
+                        xij = 2.0 * xi * xj;
                         self.k3 += xij * self.kij5[i][j];
                         u += xij * self.uij5[i][j];
                         g += xij * self.gij5[i][j];
@@ -1045,13 +1045,13 @@ impl Detail {
                 }
             }
         }
-        self.k3 = f64::powf(self.k3, 0.6);
-        u = f64::powf(u, 0.2);
+        self.k3 = self.k3.powf(0.6);
+        u = u.powf(0.2);
 
         // Third virial and higher coefficients
-        q2 = f64::powi(q, 2);
+        q2 = q.powi(2);
         for n in 12..58 {
-            self.csn[n] = AN[n] * f64::powf(u, UN[n]);
+            self.csn[n] = AN[n] * u.powf(UN[n]);
             if GN[n] == 1 {
                 self.csn[n] *= g;
             }
@@ -1097,15 +1097,15 @@ impl Detail {
         self.a0[1] = 0.0;
         self.a0[2] = 0.0;
         if self.d > EPSILON {
-            logd = f64::ln(self.d);
+            logd = self.d.ln();
         } else {
-            logd = f64::ln(EPSILON);
+            logd = EPSILON.ln();
         }
-        logt = f64::ln(self.t);
+        logt = self.t.ln();
 
         for (i, x) in self.x.iter().enumerate() {
             if x > &0.0 {
-                logxd = logd + f64::ln(*x);
+                logxd = logd + x.ln();
                 sumhyp0 = 0.0;
                 sumhyp1 = 0.0;
                 sumhyp2 = 0.0;
@@ -1113,21 +1113,21 @@ impl Detail {
                 for j in 3..7 {
                     if TH0I[i][j] > 0.0 {
                         th0t = TH0I[i][j] / self.t;
-                        ep = f64::exp(th0t);
+                        ep = th0t.exp();
                         em = 1.0 / ep;
                         hsn = (ep - em) / 2.0;
                         hcn = (ep + em) / 2.0;
 
                         if j == 3 || j == 5 {
-                            loghyp = f64::ln(f64::abs(hsn));
+                            loghyp = hsn.abs().ln();
                             sumhyp0 += self.n0i[i][j] * loghyp;
                             sumhyp1 += self.n0i[i][j] * (loghyp - th0t * hcn / hsn);
-                            sumhyp2 += self.n0i[i][j] * f64::powi(th0t / hsn, 2);
+                            sumhyp2 += self.n0i[i][j] * (th0t / hsn).powi(2);
                         } else {
-                            loghyp = f64::ln(f64::abs(hcn));
+                            loghyp = hcn.abs().ln();
                             sumhyp0 += -self.n0i[i][j] * loghyp;
                             sumhyp1 += -self.n0i[i][j] * (loghyp - th0t * hsn / hcn);
-                            sumhyp2 += self.n0i[i][j] * f64::powi(th0t / hcn, 2);
+                            sumhyp2 += self.n0i[i][j] * (th0t / hcn).powi(2);
                         }
                     }
                 }
@@ -1193,9 +1193,9 @@ impl Detail {
                 self.ar[i][j] = 0.0;
             }
         }
-        if f64::abs(self.t - self.told) > 0.000_000_1 {
+        if (self.t - self.told).abs() > 0.000_000_1 {
             for (i, item) in UN.iter().enumerate() {
-                self.tun[i] = f64::powf(self.t, -item);
+                self.tun[i] = self.t.powf(-item);
             }
         }
         self.told = self.t;
@@ -1210,7 +1210,7 @@ impl Detail {
         expn[0] = 1.0;
 
         for n in 1..5 {
-            expn[n] = f64::exp(-dknn[n]);
+            expn[n] = (-dknn[n]).exp();
         }
         rt = RDETAIL * self.t;
 
@@ -1283,7 +1283,7 @@ impl Detail {
         let tolr: f64;
         let mut p2: f64;
 
-        if f64::abs(self.p) < EPSILON {
+        if self.p.abs() < EPSILON {
             self.d = 0.0;
             return self.d;
         }
@@ -1291,17 +1291,17 @@ impl Detail {
         if self.d > -EPSILON {
             self.d = self.p / RDETAIL / self.t; // Ideal gas estimate
         } else {
-            self.d = f64::abs(self.d); // If D<0, then use as initial estimate
+            self.d = self.d.abs(); // If D<0, then use as initial estimate
         }
-        plog = f64::ln(self.p);
-        vlog = -f64::ln(self.d);
+        plog = self.p.ln();
+        vlog = -self.d.ln();
         for _it in 0..20 {
             if !(-7.0..=100.0).contains(&vlog) {
                 //ierr = 1; herr = "Calculation failed to converge in DETAIL method, ideal gas density returned.";
                 self.d = self.p / RDETAIL / self.t;
                 return self.d;
             }
-            self.d = f64::exp(-vlog);
+            self.d = (-vlog).exp();
             p2 = self.pressure_detail();
             if self.dp_dd_save < EPSILON || p2 < EPSILON {
                 vlog += 0.1;
@@ -1310,10 +1310,10 @@ impl Detail {
                 // log(P) as the known variable and log(v) as the unknown property.
                 // See AGA 8 publication for further information.
                 dpdlv = -self.d * self.dp_dd_save; // d(p)/d[log(v)]
-                vdiff = (f64::ln(p2) - plog) * p2 / dpdlv;
+                vdiff = (p2.ln() - plog) * p2 / dpdlv;
                 vlog -= vdiff;
-                if f64::abs(vdiff) < tolr {
-                    self.d = f64::exp(-vlog);
+                if vdiff.abs() < tolr {
+                    self.d = (-vlog).exp();
                     return self.d; // Iteration converged
                 }
             }
@@ -1365,7 +1365,7 @@ impl Detail {
         if self.d > EPSILON {
             self.h = self.u + self.p / self.d;
             self.g = a + self.p / self.d;
-            self.cp = self.cv + self.t * f64::powi(self.dp_dt / self.d, 2) / self.dp_dd;
+            self.cp = self.cv + self.t * (self.dp_dt / self.d).powi(2) / self.dp_dd;
             self.d2p_dd2 = (2.0 * self.ar[0][1] + 4.0 * self.ar[0][2] + self.ar[0][3]) / self.d;
             self.jt = (self.t / self.d * self.dp_dt / self.dp_dd - 1.0) / self.cp / self.d;
         } else {
@@ -1379,7 +1379,7 @@ impl Detail {
         if self.w < 0.0 {
             self.w = 0.0;
         }
-        self.w = f64::sqrt(self.w);
+        self.w = self.w.sqrt();
         self.kappa = self.w * self.w * mm / (rt * 1000.0 * self.z);
         self.d2p_dtd = 0.0;
     }

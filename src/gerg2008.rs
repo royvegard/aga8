@@ -2375,8 +2375,8 @@ impl Gerg2008 {
         let mut bijk = [[0.0; MAXTRMM + 1]; MAXMDL + 1];
 
         for i in 1..=MAXFLDS {
-            vc3[i] = 1.0 / f64::powf(DC[i], 1.0 / 3.0) / 2.0;
-            tc2[i] = f64::sqrt(TC[i]);
+            vc3[i] = 1.0 / DC[i].powf(1.0 / 3.0) / 2.0;
+            tc2[i] = TC[i].sqrt();
             self.coik[i][1] = 0;
             self.doik[i][1] = 1;
             self.toik[i][1] = 0.25;
@@ -4123,17 +4123,17 @@ impl Gerg2008 {
             self.gvij[i][i] = 1.0 / DC[i];
             self.gtij[i][i] = TC[i];
             for j in i + 1..=MAXFLDS {
-                self.gvij[i][j] = self.gvij[i][j] * self.bvij[i][j] * f64::powi(vc3[i] + vc3[j], 3);
+                self.gvij[i][j] = self.gvij[i][j] * self.bvij[i][j] * (vc3[i] + vc3[j]).powi(3);
                 self.gtij[i][j] = self.gtij[i][j] * self.btij[i][j] * tc2[i] * tc2[j];
-                self.bvij[i][j] = f64::powi(self.bvij[i][j], 2);
-                self.btij[i][j] = f64::powi(self.btij[i][j], 2);
+                self.bvij[i][j] = self.bvij[i][j].powi(2);
+                self.btij[i][j] = self.btij[i][j].powi(2);
             }
         }
 
         for (i, bijki) in bijk.iter().enumerate().skip(1) {
             for (j, bijkij) in bijki.iter().enumerate().skip(1) {
                 self.gijk[i][j] =
-                    -self.cijk[i][j] * f64::powi(self.eijk[i][j], 2) + bijkij * self.gijk[i][j];
+                    -self.cijk[i][j] * self.eijk[i][j].powi(2) + bijkij * self.gijk[i][j];
                 self.eijk[i][j] = 2.0 * self.cijk[i][j] * self.eijk[i][j] - bijkij;
                 self.cijk[i][j] = -self.cijk[i][j];
             }
@@ -4148,7 +4148,7 @@ impl Gerg2008 {
                 self.n0i[i][j] *= RSR;
             }
             self.n0i[i][2] -= t0;
-            self.n0i[i][1] -= f64::ln(d0);
+            self.n0i[i][1] -= d0.ln();
         }
     }
 
@@ -4180,11 +4180,11 @@ impl Gerg2008 {
                 self.d = dcx * 3.0;
             }
         } else {
-            self.d = f64::abs(self.d);
+            self.d = self.d.abs();
         }
 
-        let plog = f64::ln(self.p);
-        let mut vlog = -f64::ln(self.d);
+        let plog = self.p.ln();
+        let mut vlog = -self.d.ln();
 
         for it in 1..=50 {
             if !(-7.0..=100.0).contains(&vlog) || it == 20 || it == 30 || it == 40 || ifail == 1 {
@@ -4203,9 +4203,9 @@ impl Gerg2008 {
                 } else if nfail == 3 {
                     self.d = dcx * 2.0; // If search fails, look for root in critical region
                 }
-                vlog = -f64::ln(self.d);
+                vlog = -self.d.ln();
             }
-            self.d = f64::exp(-vlog);
+            self.d = (-vlog).exp();
             let p2 = self.pressure();
             if self.dpddsave < EPSILON || p2 < EPSILON {
                 // Current state is 2-phase, try locating a different state that is single phase
@@ -4222,14 +4222,14 @@ impl Gerg2008 {
                 // log(P) as the known variable and log(v) as the unknown property.
                 // See AGA 8 publication for further information.
                 let dpdlv = -self.d * self.dpddsave; // d(p)/d[log(v)]
-                let vdiff = (f64::ln(p2) - plog) * p2 / dpdlv;
+                let vdiff = (p2.ln() - plog) * p2 / dpdlv;
                 vlog += -vdiff;
-                if f64::abs(vdiff) < TOLR {
+                if vdiff.abs() < TOLR {
                     // Check to see if state is possibly 2-phase, and if so restart
                     if self.dpddsave < 0.0 {
                         ifail = 1;
                     } else {
-                        self.d = f64::exp(-vlog);
+                        self.d = (-vlog).exp();
 
                         // If requested, check to see if point is possibly 2-phase
                         if iflag > 0 {
@@ -4287,8 +4287,8 @@ impl Gerg2008 {
         if self.w < 0.0 {
             self.w = 0.0;
         }
-        self.w = f64::sqrt(self.w);
-        self.kappa = f64::powi(self.w, 2) * self.mm / (rt * 1000.0 * self.z);
+        self.w = self.w.sqrt();
+        self.kappa = self.w.powi(2) * self.mm / (rt * 1000.0 * self.z);
         p
     }
 
@@ -4302,7 +4302,7 @@ impl Gerg2008 {
 
         // Check to see if a component fraction has changed.  If x is the same as the previous call, then exit.
         for i in 1..=NC_GERG {
-            if f64::abs(self.x[i] - self.xold[i]) > 0.000_000_1 {
+            if (self.x[i] - self.xold[i]).abs() > 0.000_000_1 {
                 icheck = 1;
             }
             self.xold[i] = self.x[i];
@@ -4353,31 +4353,31 @@ impl Gerg2008 {
         self.a0[1] = 0.0;
         self.a0[2] = 0.0;
         if self.d > EPSILON {
-            logd = f64::ln(self.d);
+            logd = self.d.ln();
         } else {
-            logd = f64::ln(EPSILON);
+            logd = EPSILON.ln();
         }
-        logt = f64::ln(self.t);
+        logt = self.t.ln();
         for (i, th0i) in TH0I.iter().enumerate().skip(1) {
             if self.x[i] > EPSILON {
-                logxd = logd + f64::ln(self.x[i]);
+                logxd = logd + self.x[i].ln();
                 sumhyp0 = 0.0;
                 sumhyp1 = 0.0;
                 sumhyp2 = 0.0;
                 for (j, th0ij) in th0i.iter().enumerate().take(8).skip(4) {
                     if th0ij > &EPSILON {
                         th0t = th0ij / self.t;
-                        ep = f64::exp(th0t);
+                        ep = th0t.exp();
                         em = 1.0 / ep;
                         hsn = (ep - em) / 2.0;
                         hcn = (ep + em) / 2.0;
                         if j == 4 || j == 6 {
-                            loghyp = f64::ln(f64::abs(hsn));
+                            loghyp = hsn.abs().ln();
                             sumhyp0 += self.n0i[i][j] * loghyp;
                             sumhyp1 += self.n0i[i][j] * th0t * hcn / hsn;
                             sumhyp2 += self.n0i[i][j] * (th0t / hsn) * (th0t / hsn);
                         } else {
-                            loghyp = f64::ln(f64::abs(hcn));
+                            loghyp = hcn.abs().ln();
                             sumhyp0 -= self.n0i[i][j] * loghyp;
                             sumhyp1 -= self.n0i[i][j] * th0t * hsn / hcn;
                             sumhyp2 += self.n0i[i][j] * (th0t / hcn) * (th0t / hcn);
@@ -4416,16 +4416,16 @@ impl Gerg2008 {
         let (dr, tr) = self.reducingparameters();
         let del = self.d / dr;
         let tau = tr / self.t;
-        let lntau = f64::ln(tau);
+        let lntau = tau.ln();
         delp[1] = del;
-        expd[1] = f64::exp(-delp[1]);
+        expd[1] = (-delp[1]).exp();
         for i in 2..8 {
             delp[i] = delp[i - 1] * del;
-            expd[i] = f64::exp(-delp[i]);
+            expd[i] = (-delp[i]).exp();
         }
 
         // If temperature has changed, calculate temperature dependent parts
-        if f64::abs(self.t - self.told) > 0.000_000_1 || f64::abs(tr - self.trold2) > 0.000_000_1 {
+        if (self.t - self.told).abs() > 0.000_000_1 || (tr - self.trold2).abs() > 0.000_000_1 {
             self.tterms(lntau);
         }
         self.told = self.t;
@@ -4508,9 +4508,8 @@ impl Gerg2008 {
                                 ndt = xijf
                                     * self.nijk[mn][k]
                                     * delp[self.dijk[mn][k]]
-                                    * f64::exp(
-                                        cij0 + eij0 + self.gijk[mn][k] + self.tijk[mn][k] * lntau,
-                                    );
+                                    * (cij0 + eij0 + self.gijk[mn][k] + self.tijk[mn][k] * lntau)
+                                        .exp();
                                 ex = self.dijk[mn][k] as f64 + 2.0 * cij0 + eij0;
                                 ex2 = ex * ex - self.dijk[mn][k] as f64 + 2.0 * cij0;
                                 self.ar[0][1] += ndt * ex;
@@ -4541,7 +4540,7 @@ impl Gerg2008 {
 
         //i = 5;  // Use propane to get exponents for short form of EOS
         for (k, taup) in taup0.iter_mut().enumerate().skip(1) {
-            *taup = f64::exp(self.toik[i][k] * lntau);
+            *taup = (self.toik[i][k] * lntau).exp();
         }
         for i in 1..=NC_GERG {
             if self.x[i] > EPSILON {
@@ -4551,7 +4550,7 @@ impl Gerg2008 {
                     }
                 } else {
                     for k in 1..=KPOL[i] + KEXP[i] {
-                        self.taup[i][k] = NOIK[i][k] * f64::exp(self.toik[i][k] * lntau);
+                        self.taup[i][k] = NOIK[i][k] * (self.toik[i][k] * lntau).exp();
                     }
                 }
             }
@@ -4565,7 +4564,7 @@ impl Gerg2008 {
                         if mn > 0 {
                             for k in 1..=KPOLIJ[mn] {
                                 self.taupijk[mn][k] =
-                                    self.nijk[mn][k] * f64::exp(self.tijk[mn][k] * lntau);
+                                    self.nijk[mn][k] * (self.tijk[mn][k] * lntau).exp();
                             }
                         }
                     }
