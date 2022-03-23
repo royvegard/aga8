@@ -4336,8 +4336,6 @@ impl Gerg2008 {
     }
 
     fn alpha0(&mut self) {
-        let logt: f64;
-        let logd: f64;
         let mut loghyp: f64;
         let mut th0t: f64;
         let mut logxd: f64;
@@ -4352,12 +4350,12 @@ impl Gerg2008 {
         self.a0[0] = 0.0;
         self.a0[1] = 0.0;
         self.a0[2] = 0.0;
-        if self.d > EPSILON {
-            logd = self.d.ln();
+        let logd = if self.d > EPSILON {
+            self.d.ln()
         } else {
-            logd = EPSILON.ln();
-        }
-        logt = self.t.ln();
+            EPSILON.ln()
+        };
+        let logt = self.t.ln();
         for (i, th0i) in TH0I.iter().enumerate().skip(1) {
             if self.x[i] > EPSILON {
                 logxd = logd + self.x[i].ln();

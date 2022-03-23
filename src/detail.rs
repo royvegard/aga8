@@ -979,17 +979,11 @@ impl Detail {
 
     /// Calculate terms dependent only on composition
     fn x_terms(&mut self) {
-        let mut g: f64;
-        let mut q: f64;
-        let mut f: f64;
-        let mut u: f64;
-        let q2: f64;
         let mut xij: f64;
         let mut xi2: f64;
-        let mut icheck: i32;
 
         // Check to see if a component fraction has changed.  If x is the same as the previous call, then exit.
-        icheck = 0;
+        let mut icheck = 0;
 
         for (i, x) in self.x.iter().enumerate() {
             if (x - self.xold[i]).abs() > 0.000_000_1 {
@@ -1002,10 +996,10 @@ impl Detail {
         }
 
         self.k3 = 0.0;
-        u = 0.0;
-        g = 0.0;
-        q = 0.0;
-        f = 0.0;
+        let mut u = 0.0;
+        let mut g = 0.0;
+        let mut q = 0.0;
+        let mut f = 0.0;
         for n in 0..18 {
             self.bs[n] = 0.0;
         }
@@ -1049,7 +1043,7 @@ impl Detail {
         u = u.powf(0.2);
 
         // Third virial and higher coefficients
-        q2 = q.powi(2);
+        let q2 = q.powi(2);
         for n in 12..58 {
             self.csn[n] = AN[n] * u.powf(UN[n]);
             if GN[n] == 1 {
@@ -1078,8 +1072,6 @@ impl Detail {
         // a0(1) -   partial  (a0)/partial(T) [J/(mol-K)]
         // a0(2) - T*partial^2(a0)/partial(T)^2 [J/(mol-K)]
 
-        let logt: f64;
-        let logd: f64;
         let mut loghyp: f64;
         let mut th0t: f64;
         let mut logxd: f64;
@@ -1096,12 +1088,12 @@ impl Detail {
         self.a0[0] = 0.0;
         self.a0[1] = 0.0;
         self.a0[2] = 0.0;
-        if self.d > EPSILON {
-            logd = self.d.ln();
+        let logd = if self.d > EPSILON {
+            self.d.ln()
         } else {
-            logd = EPSILON.ln();
-        }
-        logt = self.t.ln();
+            EPSILON.ln()
+        };
+        let logt = self.t.ln();
 
         for (i, x) in self.x.iter().enumerate() {
             if x > &0.0 {
@@ -1167,14 +1159,12 @@ impl Detail {
 
         let mut ckd;
         let mut bkd;
-        let dred;
 
         let mut sum;
         let mut s0;
         let mut s1;
         let mut s2;
         let mut s3;
-        let rt;
 
         let mut sum0: [f64; NTERMS] = [0.0; NTERMS];
         let mut sumb: [f64; NTERMS] = [0.0; NTERMS];
@@ -1201,7 +1191,7 @@ impl Detail {
         self.told = self.t;
 
         // Precalculation of common powers and exponents of density
-        dred = self.k3 * self.d;
+        let dred = self.k3 * self.d;
         dknn[0] = 1.0;
 
         for n in 1..10 {
@@ -1212,7 +1202,7 @@ impl Detail {
         for n in 1..5 {
             expn[n] = (-dknn[n]).exp();
         }
-        rt = RDETAIL * self.t;
+        let rt = RDETAIL * self.t;
 
         for n in 0..58 {
             // Contributions to the Helmholtz energy and its derivatives with respect to temperature
@@ -1276,25 +1266,22 @@ impl Detail {
     /// It is up to the user to locate the phase boundary, and thus identify the phase of the T and P inputs.
     /// If the state point is 2-phase, the output density will represent a metastable state.
     pub fn density_detail(&mut self) -> f64 {
-        let plog: f64;
-        let mut vlog: f64;
         let mut dpdlv: f64;
         let mut vdiff: f64;
-        let tolr: f64;
         let mut p2: f64;
 
         if self.p.abs() < EPSILON {
             self.d = 0.0;
             return self.d;
         }
-        tolr = 0.000_000_1;
+        const TOLR: f64 = 0.000_000_1;
         if self.d > -EPSILON {
             self.d = self.p / RDETAIL / self.t; // Ideal gas estimate
         } else {
             self.d = self.d.abs(); // If D<0, then use as initial estimate
         }
-        plog = self.p.ln();
-        vlog = -self.d.ln();
+        let plog = self.p.ln();
+        let mut vlog = -self.d.ln();
         for _it in 0..20 {
             if !(-7.0..=100.0).contains(&vlog) {
                 //ierr = 1; herr = "Calculation failed to converge in DETAIL method, ideal gas density returned.";
@@ -1312,7 +1299,7 @@ impl Detail {
                 dpdlv = -self.d * self.dp_dd_save; // d(p)/d[log(v)]
                 vdiff = (p2.ln() - plog) * p2 / dpdlv;
                 vlog -= vdiff;
-                if vdiff.abs() < tolr {
+                if vdiff.abs() < TOLR {
                     self.d = (-vlog).exp();
                     return self.d; // Iteration converged
                 }
@@ -1338,12 +1325,7 @@ impl Detail {
     /// Molarmass, Alpha0Detail, and AlpharDetail.  If the density is not known, call subroutine DensityDetail first
     /// with the known values of pressure and temperature.
     pub fn properties_detail(&mut self) {
-        let mm: f64;
-        let a: f64;
-        let r: f64;
-        let rt: f64;
-
-        mm = self.molar_mass_detail();
+        let mm = self.molar_mass_detail();
         self.x_terms();
 
         // Calculate the ideal gas Helmholtz energy, and its first and second derivatives with respect to temperature.
@@ -1352,13 +1334,12 @@ impl Detail {
         // Calculate the real gas Helmholtz energy, and its derivatives with respect to temperature and/or density.
         self.alphar(2, 3);
 
-        r = RDETAIL;
-        rt = r * self.t;
+        let rt = RDETAIL * self.t;
         self.z = 1.0 + self.ar[0][1] / rt;
         self.p = self.d * rt * self.z;
         self.dp_dd = rt + 2.0 * self.ar[0][1] + self.ar[0][2];
-        self.dp_dt = self.d * r + self.d * self.ar[1][1];
-        a = self.a0[0] + self.ar[0][0];
+        self.dp_dt = self.d * RDETAIL + self.d * self.ar[1][1];
+        let a = self.a0[0] + self.ar[0][0];
         self.s = -self.a0[1] - self.ar[1][0];
         self.u = a + self.t * self.s;
         self.cv = -(self.a0[2] + self.ar[2][0]);
@@ -1371,7 +1352,7 @@ impl Detail {
         } else {
             self.h = self.u + rt;
             self.g = a + rt;
-            self.cp = self.cv + r;
+            self.cp = self.cv + RDETAIL;
             self.d2p_dd2 = 0.0;
             self.jt = 1.0E+20; //=(dB/dT*T-B)/Cp for an ideal gas, but dB/dT is not calculated here
         }
