@@ -1,4 +1,4 @@
-use aga8::Gerg2008;
+use aga8::gerg2008::Gerg2008;
 
 fn main() {
     let mut gerg_test: Gerg2008 = Gerg2008::default();

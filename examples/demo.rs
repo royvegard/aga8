@@ -1,4 +1,4 @@
-use aga8::Detail;
+use aga8::detail::Detail;
 
 fn main() {
     let mut aga8_test: Detail = Detail::new();

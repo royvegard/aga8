@@ -1,6 +1,6 @@
 #[test]
 fn detail_demo_example() {
-    let mut aga_test = aga8::Detail::new();
+    let mut aga_test = aga8::detail::Detail::new();
 
     aga_test.setup();
 
@@ -35,4 +35,21 @@ fn detail_demo_example() {
     assert!(f64::abs(aga_test.g - 16_584.229_834_977_85) < 1.0e-10);
     assert!(f64::abs(aga_test.jt - 7.432_969_304_794_577E-5) < 1.0e-10);
     assert!(f64::abs(aga_test.kappa - 2.672_509_225_184_606) < 1.0e-10);
+}
+
+#[cfg(feature = "extern")]
+#[test]
+fn detail_api_test_01() {
+    let composition: [f64; 21] = [
+        0.965, 0.003, 0.006, 0.018, 0.0045, 0.001, 0.001, 0.0005, 0.0003, 0.0007, 0.0, 0.0, 0.0,
+        0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+    ];
+
+    let temperature = 18.0 + 273.15;
+    let pressure = 14601.325;
+
+    unsafe {
+        let result = aga8::detail_external::aga8_2017(&composition[0], pressure, temperature);
+        assert!(f64::abs(result.d - 7.731_358_744_220) < 1.0e-10);
+    }
 }

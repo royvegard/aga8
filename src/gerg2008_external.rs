@@ -1,0 +1,243 @@
+use super::gerg2008::{Gerg2008, NC_GERG};
+use std::slice;
+
+/// Return type
+#[repr(C)]
+pub struct Properties {
+    /// Molar concentration [mol/l]
+    pub d: f64,
+    /// Molar mass [g/mol]
+    pub mm: f64,
+    /// Compressibility factor [-]
+    pub z: f64,
+    /// First derivative of pressure with respect
+    /// to density at constant temperature [kPa/(mol/l)]
+    pub dp_dd: f64,
+    /// Second derivative of pressure with respect to
+    /// temperature and density [kPa/(mol/l)/K] (currently not calculated)
+    pub d2p_dd2: f64,
+    /// First derivative of pressure with respect to
+    /// temperature at constant density [kPa/K]
+    pub dp_dt: f64,
+    /// Internal energy [J/mol]
+    pub u: f64,
+    /// Enthalpy [J/mol]
+    pub h: f64,
+    /// Entropy [J/(mol-K)]
+    pub s: f64,
+    /// Isochoric heat capacity [J/(mol-K)]
+    pub cv: f64,
+    /// Isobaric heat capacity [J/(mol-K)]
+    pub cp: f64,
+    /// Speed of sound [m/s]
+    pub w: f64,
+    /// Gibbs energy [J/mol]
+    pub g: f64,
+    /// Joule-Thomson coefficient [K/kPa]
+    pub jt: f64,
+    /// Isentropic Exponent
+    pub kappa: f64,
+}
+
+/// # Safety
+///
+/// # Examples
+/// ```
+/// let composition: [f64; 21] = [
+/// 0.77824, 0.02, 0.06, 0.08, 0.03, 0.0015, 0.003, 0.0005, 0.00165, 0.00215, 0.00088, 0.00024,
+/// 0.00015, 0.00009, 0.004, 0.005, 0.002, 0.0001, 0.0025, 0.007, 0.001,
+/// ];
+///
+/// let temperature = 400.0;
+/// let pressure = 50000.0;
+///
+/// unsafe {
+///     let result = aga8::gerg2008_external::gerg_2008(&composition[0], pressure, temperature);
+///
+///     assert!(f64::abs(result.d - 12.798_286_260_820_62) < 1.0e-10);
+/// }
+/// ```
+
+#[no_mangle]
+pub unsafe extern "C" fn gerg_2008(
+    composition: *const f64,
+    pressure: f64,
+    temperature: f64,
+) -> Properties {
+    assert!(!composition.is_null());
+    let array = slice::from_raw_parts(composition, NC_GERG);
+
+    let mut gerg_test: Gerg2008 = Gerg2008::new();
+    gerg_test.setup();
+
+    gerg_test.x[1..=NC_GERG].clone_from_slice(array);
+    gerg_test.t = temperature;
+    gerg_test.p = pressure;
+    gerg_test.density(0);
+    gerg_test.properties();
+
+    Properties {
+        d: gerg_test.d, // Molar concentration [mol/l]
+        mm: gerg_test.mm,
+        z: gerg_test.z,
+        dp_dd: gerg_test.dp_dd,
+        d2p_dd2: gerg_test.d2p_dd2,
+        dp_dt: gerg_test.dp_dt,
+        u: gerg_test.u,
+        h: gerg_test.h,
+        s: gerg_test.s,
+        cv: gerg_test.cv,
+        cp: gerg_test.cp,
+        w: gerg_test.w,
+        g: gerg_test.g,
+        jt: gerg_test.jt,
+        kappa: gerg_test.kappa,
+    }
+}
+
+/// Create a Gerg2008 type
+///
+#[no_mangle]
+pub extern "C" fn gerg_new() -> *mut Gerg2008 {
+    Box::into_raw(Box::new(Gerg2008::new()))
+}
+
+/// Frees the memory used by the Gerg2008 type
+///
+/// # Safety
+///
+#[no_mangle]
+pub unsafe extern "C" fn gerg_free(ptr: *mut Gerg2008) {
+    if ptr.is_null() {
+        return;
+    }
+    Box::from_raw(ptr);
+}
+
+/// # Safety
+///
+#[no_mangle]
+pub unsafe extern "C" fn gerg_setup(ptr: *mut Gerg2008) {
+    assert!(!ptr.is_null());
+    let gerg = &mut *ptr;
+    gerg.setup();
+}
+
+/// # Safety
+///
+#[no_mangle]
+pub unsafe extern "C" fn gerg_set_composition(ptr: *mut Gerg2008, composition: *const f64) {
+    assert!(!ptr.is_null());
+    assert!(!composition.is_null());
+    let gerg = &mut *ptr;
+    let array = slice::from_raw_parts(composition, NC_GERG);
+    gerg.x[1..=NC_GERG].clone_from_slice(array);
+}
+
+/// # Safety
+///
+#[no_mangle]
+pub unsafe extern "C" fn gerg_set_pressure(ptr: *mut Gerg2008, pressure: f64) {
+    assert!(!ptr.is_null());
+    let gerg = &mut *ptr;
+    gerg.p = pressure;
+}
+
+/// # Safety
+///
+#[no_mangle]
+pub unsafe extern "C" fn gerg_get_pressure(ptr: *mut Gerg2008) -> f64 {
+    assert!(!ptr.is_null());
+    let gerg = &mut *ptr;
+    gerg.p
+}
+
+/// # Safety
+///
+#[no_mangle]
+pub unsafe extern "C" fn gerg_set_temperature(ptr: *mut Gerg2008, temperature: f64) {
+    assert!(!ptr.is_null());
+    let gerg = &mut *ptr;
+    gerg.t = temperature;
+}
+
+/// # Safety
+///
+#[no_mangle]
+pub unsafe extern "C" fn gerg_get_temperature(ptr: *mut Gerg2008) -> f64 {
+    assert!(!ptr.is_null());
+    let gerg = &mut *ptr;
+    gerg.t
+}
+
+/// # Safety
+///
+#[no_mangle]
+pub unsafe extern "C" fn gerg_set_density(ptr: *mut Gerg2008, density: f64) {
+    assert!(!ptr.is_null());
+    let gerg = &mut *ptr;
+    gerg.d = density;
+}
+
+/// # Safety
+///
+#[no_mangle]
+pub unsafe extern "C" fn gerg_get_density(ptr: *mut Gerg2008) -> f64 {
+    assert!(!ptr.is_null());
+    let gerg = &mut *ptr;
+    gerg.d
+}
+
+/// # Safety
+///
+#[no_mangle]
+pub unsafe extern "C" fn gerg_get_properties(ptr: *const Gerg2008) -> Properties {
+    assert!(!ptr.is_null());
+    let gerg = &*ptr;
+    Properties {
+        d: gerg.d, // Molar concentration [mol/l]
+        mm: gerg.mm,
+        z: gerg.z,
+        dp_dd: gerg.dp_dd,
+        d2p_dd2: gerg.d2p_dd2,
+        dp_dt: gerg.dp_dt,
+        u: gerg.u,
+        h: gerg.h,
+        s: gerg.s,
+        cv: gerg.cv,
+        cp: gerg.cp,
+        w: gerg.w,
+        g: gerg.g,
+        jt: gerg.jt,
+        kappa: gerg.kappa,
+    }
+}
+
+/// # Safety
+///
+#[no_mangle]
+pub unsafe extern "C" fn gerg_calculate_pressure(ptr: *mut Gerg2008) {
+    assert!(!ptr.is_null());
+    let gerg = &mut *ptr;
+    gerg.pressure();
+}
+
+/// Calculates the density
+///
+/// # Safety
+///
+#[no_mangle]
+pub unsafe extern "C" fn gerg_calculate_density(ptr: *mut Gerg2008) {
+    assert!(!ptr.is_null());
+    let gerg = &mut *ptr;
+    gerg.density(0);
+}
+
+/// # Safety
+///
+#[no_mangle]
+pub unsafe extern "C" fn gerg_calculate_properties(ptr: *mut Gerg2008) {
+    assert!(!ptr.is_null());
+    let gerg = &mut *ptr;
+    gerg.properties();
+}

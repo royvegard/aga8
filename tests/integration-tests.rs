@@ -1,4 +1,4 @@
-use aga8::Detail;
+use aga8::detail::Detail;
 
 #[test]
 fn test_gas_2() {

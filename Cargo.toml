@@ -8,6 +8,9 @@ repository = "https://github.com/royvegard/aga8.git"
 license-file = "LICENSE"
 readme = "README.md"
 
+[features]
+extern = []
+
 [package.metadata.winres]
 OriginalFilename = "aga8.dll"
 

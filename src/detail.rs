@@ -608,7 +608,7 @@ const TH0I: [[f64; 7]; MAXFLDS] = [
 /// # Example
 ///
 /// ```
-/// use aga8::Detail;
+/// use aga8::detail::Detail;
 ///
 /// let mut aga8_test: Detail = Detail::new();
 ///
