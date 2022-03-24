@@ -49,7 +49,7 @@ fn detail_api_test_01() {
     let pressure = 14601.325;
 
     unsafe {
-        let result = aga8::detail_external::aga8_2017(&composition[0], pressure, temperature);
+        let result = aga8::ffi::detail::aga8_2017(&composition[0], pressure, temperature);
         assert!(f64::abs(result.d - 7.731_358_744_220) < 1.0e-10);
     }
 }

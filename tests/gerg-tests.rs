@@ -42,7 +42,7 @@ fn gerg_demo_example() {
 #[cfg(feature = "extern")]
 #[test]
 fn gerg_api_call() {
-    use aga8::gerg2008_external::*;
+    use aga8::ffi::gerg2008::*;
 
     let composition: [f64; 21] = [
         0.77824, 0.02, 0.06, 0.08, 0.03, 0.0015, 0.003, 0.0005, 0.00165, 0.00215, 0.00088, 0.00024,
@@ -86,7 +86,7 @@ fn gerg_test_01() {
 #[cfg(feature = "extern")]
 #[test]
 fn gerg_api_test_01() {
-    use aga8::gerg2008_external::*;
+    use aga8::ffi::gerg2008::*;
 
     let composition: [f64; 21] = [
         0.965, 0.003, 0.006, 0.018, 0.0045, 0.001, 0.001, 0.0005, 0.0003, 0.0007, 0.0, 0.0, 0.0,
