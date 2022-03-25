@@ -5,36 +5,36 @@
 /// Return type
 #[repr(C)]
 pub struct Properties {
-    /// Molar concentration [mol/l]
+    /// Molar concentration in mol/l
     pub d: f64,
-    /// Molar mass [g/mol]
+    /// Molar mass in g/mol
     pub mm: f64,
-    /// Compressibility factor [-]
+    /// Compressibility factor
     pub z: f64,
     /// First derivative of pressure with respect
-    /// to density at constant temperature [kPa/(mol/l)]
+    /// to density at constant temperature in kPa/(mol/l)
     pub dp_dd: f64,
     /// Second derivative of pressure with respect to
-    /// temperature and density [kPa/(mol/l)/K] (currently not calculated)
+    /// temperature and density in kPa/(mol/l)/K (currently not calculated)
     pub d2p_dd2: f64,
     /// First derivative of pressure with respect to
-    /// temperature at constant density [kPa/K]
+    /// temperature at constant density in kPa/K
     pub dp_dt: f64,
-    /// Internal energy [J/mol]
+    /// Internal energy in J/mol
     pub u: f64,
-    /// Enthalpy [J/mol]
+    /// Enthalpy in J/mol
     pub h: f64,
-    /// Entropy [J/(mol-K)]
+    /// Entropy in J/(mol-K)
     pub s: f64,
-    /// Isochoric heat capacity [J/(mol-K)]
+    /// Isochoric heat capacity in J/(mol-K)
     pub cv: f64,
-    /// Isobaric heat capacity [J/(mol-K)]
+    /// Isobaric heat capacity in J/(mol-K)
     pub cp: f64,
-    /// Speed of sound [m/s]
+    /// Speed of sound in m/s
     pub w: f64,
-    /// Gibbs energy [J/mol]
+    /// Gibbs energy in J/mol
     pub g: f64,
-    /// Joule-Thomson coefficient [K/kPa]
+    /// Joule-Thomson coefficient in K/kPa
     pub jt: f64,
     /// Isentropic Exponent
     pub kappa: f64,

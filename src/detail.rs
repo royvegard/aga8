@@ -6,7 +6,7 @@ const NTERMS: usize = 58;
 const EPSILON: f64 = 1e-15;
 const RDETAIL: f64 = 8.31451;
 
-/// Molar masses (g/mol)
+// Molar masses (g/mol)
 const MMI: [f64; 21] = [
     16.043,  // Methane
     28.0135, // Nitrogen
@@ -31,7 +31,7 @@ const MMI: [f64; 21] = [
     39.948,  // Argon
 ];
 
-/// Coefficients of the equation of state
+// Coefficients of the equation of state
 const AN: [f64; NTERMS] = [
     0.153_832_6,
     1.341_953_,
@@ -93,20 +93,20 @@ const AN: [f64; NTERMS] = [
     0.002_850_908,
 ];
 
-/// Density exponents
+// Density exponents
 const BN: [usize; NTERMS] = [
     1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3,
     3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 6, 6, 7, 7, 8, 8, 8, 9, 9,
 ];
 
-/// Exponents on density in EXP[-cn*D^kn] part
-/// The cn part in this term is not included in this program since it is 1 when kn<>0][and 0 otherwise
+// Exponents on density in EXP[-cn*D^kn] part
+// The cn part in this term is not included in this program since it is 1 when kn<>0][and 0 otherwise
 const KN: [usize; NTERMS] = [
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 2, 2, 2, 4, 4, 0, 0, 2, 2, 2, 4, 4, 4, 4, 0, 1, 1, 2, 2,
     3, 3, 4, 4, 4, 0, 0, 2, 2, 2, 4, 4, 0, 2, 2, 4, 4, 0, 2, 0, 2, 1, 2, 2, 2, 2,
 ];
 
-/// Temperature exponents
+// Temperature exponents
 const UN: [f64; NTERMS] = [
     0.0, 0.5, 1.0, 3.5, -0.5, 4.5, 0.5, 7.5, 9.5, 6.0, 12.0, 12.5, -6.0, 2.0, 3.0, 2.0, 2.0, 11.0,
     -0.5, 0.5, 0.0, 4.0, 6.0, 21.0, 23.0, 22.0, -1.0, -0.5, 7.0, -1.0, 6.0, 4.0, 1.0, 9.0, -13.0,
@@ -114,7 +114,7 @@ const UN: [f64; NTERMS] = [
     7.0, 3.0, 0.0, 1.0, 0.0,
 ];
 
-/// Flags
+// Flags
 // fn[13] = 1; fn[27] = 1; fn[30] = 1; fn[35] = 1;
 const FN: [i32; NTERMS] = [
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0,
@@ -147,7 +147,7 @@ const WN: [i32; NTERMS] = [
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 ];
 
-/// Energy parameters
+// Energy parameters
 const EI: [f64; MAXFLDS] = [
     151.318_3,
     99.737_78,
@@ -171,7 +171,7 @@ const EI: [f64; MAXFLDS] = [
     2.610_111,
     119.629_9,
 ];
-/// Size parameters
+// Size parameters
 const KI: [f64; MAXFLDS] = [
     0.461_925_5,
     0.447_915_3,
@@ -196,14 +196,14 @@ const KI: [f64; MAXFLDS] = [
     0.421_655_1,
 ];
 
-/// Orientation parameters
+// Orientation parameters
 const GI: [f64; MAXFLDS] = [
     0.0, 0.027_815, 0.189_065, 0.079_3, 0.141_239, 0.256_692, 0.281_835, 0.332_267, 0.366_911,
     0.289_731, 0.337_542, 0.383_381, 0.427_354, 0.469_659, 0.034_369, 0.021, 0.038_953, 0.332_5,
     0.088_5, 0.0, 0.0,
 ];
 
-/// Quadrupole parameters
+// Quadrupole parameters
 const QI: [f64; MAXFLDS] = [
     0.0, 0.0, 0.69, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.067_75,
     0.633_276, 0.0, 0.0,
@@ -228,7 +228,7 @@ const WI: [f64; MAXFLDS] = [
     0.0, 0.0, 0.0,
 ];
 
-/// Energy parameters
+// Energy parameters
 const EIJ: [[f64; MAXFLDS]; MAXFLDS] = [
     [
         1.0, 0.97164, 0.960_644, 1.0, 0.994_635, 1.019_53, 0.989_844, 1.002_35, 0.999_268,
@@ -605,6 +605,7 @@ const TH0I: [[f64; 7]; MAXFLDS] = [
 
 /// Implements the DETAIL equation of state described in
 /// AGA Report No. 8, Part 1, Third Edition, April 2017.
+///
 /// # Example
 ///
 /// ```
@@ -653,52 +654,52 @@ const TH0I: [[f64; 7]; MAXFLDS] = [
 /// ```
 
 pub struct Detail {
-    /// Calculated in the Pressure subroutine,
-    /// but not included as an argument since it
-    /// is only used internally in the density algorithm.
+    // Calculated in the Pressure subroutine,
+    // but not included as an argument since it
+    // is only used internally in the density algorithm.
     dp_dd_save: f64,
 
-    /// Temperature (K)
+    /// Temperature in K
     pub t: f64,
-    /// Pressure (kPa)
+    /// Pressure in kPa
     pub p: f64,
-    /// Molar concentration (mol/l)
+    /// Molar concentration in mol/l
     pub d: f64,
     /// Compressibility factor
     pub z: f64,
-    /// Molar mass (g/mol)
+    /// Molar mass in g/mol
     pub mm: f64,
     /// First derivative of pressure with respect
-    /// to density at constant temperature [kPa/(mol/l)]
+    /// to density at constant temperature in kPa/(mol/l)
     pub dp_dd: f64,
     /// Second derivative of pressure with respect
-    /// to density at constant temperature [kPa/(mol/l)^2]
+    /// to density at constant temperature in kPa/(mol/l)^2
     pub d2p_dd2: f64,
     /// Second derivative of pressure with respect to
-    /// temperature and density [kPa/(mol/l)/K] (currently not calculated)
+    /// temperature and density in kPa/(mol/l)/K (currently not calculated)
     pub d2p_dtd: f64,
     /// First derivative of pressure with respect to
-    /// temperature at constant density (kPa/K)
+    /// temperature at constant density in kPa/K
     pub dp_dt: f64,
-    /// Internal energy (J/mol)
+    /// Internal energy in J/mol
     pub u: f64,
-    /// Enthalpy (J/mol)
+    /// Enthalpy in J/mol
     pub h: f64,
-    /// Entropy [J/(mol-K)]
+    /// Entropy in J/(mol-K)
     pub s: f64,
-    /// Isochoric heat capacity [J/(mol-K)]
+    /// Isochoric heat capacity in J/(mol-K)
     pub cv: f64,
-    /// Isobaric heat capacity [J/(mol-K)]
+    /// Isobaric heat capacity in J/(mol-K)
     pub cp: f64,
-    /// Speed of sound (m/s)
+    /// Speed of sound in m/s
     pub w: f64,
-    /// Gibbs energy (J/mol)
+    /// Gibbs energy in J/mol
     pub g: f64,
-    /// Joule-Thomson coefficient (K/kPa)
+    /// Joule-Thomson coefficient in K/kPa
     pub jt: f64,
     /// Isentropic Exponent
     pub kappa: f64,
-    /// Composition (mole fraction)
+    /// Composition mole fractions
     pub x: [f64; NC],
 
     xold: [f64; MAXFLDS],
