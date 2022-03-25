@@ -1,7 +1,7 @@
 [package]
 name = "aga8"
 description = "AGA8 and GERG2008 equations of state"
-version = "0.0.0"
+version = "0.1.1"
 authors = ["Roy Vegard Ovesen <roy.vegard.ovesen@gmail.com>"]
 edition = "2018"
 repository = "https://github.com/royvegard/aga8.git"
