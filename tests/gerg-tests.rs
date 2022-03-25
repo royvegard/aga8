@@ -11,7 +11,7 @@ fn gerg_demo_example() {
         0.00024, 0.00015, 0.00009, 0.004, 0.005, 0.002, 0.0001, 0.0025, 0.007, 0.001,
     ];
 
-    gerg_test.molarmass();
+    gerg_test.molar_mass();
 
     gerg_test.t = 400.0;
     gerg_test.p = 50000.0;

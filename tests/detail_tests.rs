@@ -9,15 +9,15 @@ fn detail_demo_example() {
         0.00015, 0.00009, 0.004, 0.005, 0.002, 0.0001, 0.0025, 0.007, 0.001,
     ];
 
-    aga_test.molar_mass_detail();
+    aga_test.molar_mass();
 
     aga_test.t = 400.0;
     aga_test.p = 50000.0;
     aga_test.d = 6.36570;
     aga_test.z = 0.0;
 
-    aga_test.density_detail();
-    aga_test.properties_detail();
+    aga_test.density();
+    aga_test.properties();
 
     assert!(f64::abs(aga_test.d - 12.807_924_036_488_01) < 1.0e-10);
     assert!(f64::abs(aga_test.mm - 20.543_330_51) < 1.0e-10);

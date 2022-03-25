@@ -1,13 +1,13 @@
 //! The AGA8 DETAIL equation of state.
 
-pub const NC_DETAIL: usize = 21;
+pub const NC: usize = 21;
 const MAXFLDS: usize = 21;
 const NTERMS: usize = 58;
 const EPSILON: f64 = 1e-15;
 const RDETAIL: f64 = 8.31451;
 
 /// Molar masses (g/mol)
-const MMI_DETAIL: [f64; 21] = [
+const MMI: [f64; 21] = [
     16.043,  // Methane
     28.0135, // Nitrogen
     44.01,   // Carbon dioxide
@@ -644,10 +644,10 @@ const TH0I: [[f64; 7]; MAXFLDS] = [
 /// // Set temperature in K
 /// aga8_test.t = 400.0;
 /// // Run density_detail to calculate the density in mol/l
-/// aga8_test.density_detail();
+/// aga8_test.density();
 /// // Run properties_detail to calculate all of the
 /// // output properties mentioned below
-/// aga8_test.properties_detail();
+/// aga8_test.properties();
 ///
 /// assert!((12.807_924_036_488_01 - aga8_test.d).abs() < 1.0e-10);
 /// ```
@@ -699,7 +699,7 @@ pub struct Detail {
     /// Isentropic Exponent
     pub kappa: f64,
     /// Composition (mole fraction)
-    pub x: [f64; NC_DETAIL],
+    pub x: [f64; NC],
 
     xold: [f64; MAXFLDS],
     told: f64,
@@ -722,7 +722,7 @@ impl Default for Detail {
     fn default() -> Self {
         Detail {
             dp_dd_save: 0.0,
-            x: [0.0; NC_DETAIL],
+            x: [0.0; NC],
             t: 0.0,
             p: 0.0,
             d: 0.0,
@@ -966,9 +966,9 @@ impl Detail {
     ///
     /// ## Returns:
     /// - mm - Molar mass (g/mol)
-    pub fn molar_mass_detail(&mut self) -> f64 {
+    pub fn molar_mass(&mut self) -> f64 {
         let mut mm = 0.0;
-        for (i, item) in MMI_DETAIL.iter().enumerate() {
+        for (i, item) in MMI.iter().enumerate() {
             mm += self.x[i] * item;
         }
         self.mm = mm;
@@ -1266,7 +1266,7 @@ impl Detail {
     /// No checks are made to determine the phase boundary, which would have guaranteed that the output is in the gas phase.
     /// It is up to the user to locate the phase boundary, and thus identify the phase of the T and P inputs.
     /// If the state point is 2-phase, the output density will represent a metastable state.
-    pub fn density_detail(&mut self) -> f64 {
+    pub fn density(&mut self) -> f64 {
         let mut dpdlv: f64;
         let mut vdiff: f64;
         let mut p2: f64;
@@ -1290,7 +1290,7 @@ impl Detail {
                 return self.d;
             }
             self.d = (-vlog).exp();
-            p2 = self.pressure_detail();
+            p2 = self.pressure();
             if self.dp_dd_save < EPSILON || p2 < EPSILON {
                 vlog += 0.1;
             } else {
@@ -1315,7 +1315,7 @@ impl Detail {
     ///
     /// The derivative d(P)/d(D) is also calculated
     /// for use in the iterative DensityDetail subroutine (and is only returned as a common variable).
-    pub fn pressure_detail(&mut self) -> f64 {
+    pub fn pressure(&mut self) -> f64 {
         self.x_terms();
         self.alphar(0, 2);
         self.z = 1.0 + self.ar[0][1] / RDETAIL / self.t; // ar(0,1) is the first derivative of alpha(r) with respect to density
@@ -1331,8 +1331,8 @@ impl Detail {
     ///
     /// If the density is not known, call subroutine DensityDetail first
     /// with the known values of pressure and temperature.
-    pub fn properties_detail(&mut self) {
-        let mm = self.molar_mass_detail();
+    pub fn properties(&mut self) {
+        let mm = self.molar_mass();
         self.x_terms();
 
         // Calculate the ideal gas Helmholtz energy, and its first and second derivatives with respect to temperature.

@@ -58,10 +58,10 @@ aga8_test.p = 50_000.0;
 // Set temperature in K
 aga8_test.t = 400.0;
 // Run density_detail to calculate the density in mol/l
-aga8_test.density_detail();
+aga8_test.density();
 // Run properties_detail to calculate all of the
 // output properties
-aga8_test.properties_detail();
+aga8_test.properties();
 
 // Molar density
 assert!((12.807 - aga8_test.d).abs() < 1.0e-3);

@@ -4154,7 +4154,7 @@ impl Gerg2008 {
         }
     }
 
-    pub fn molarmass(&mut self) {
+    pub fn molar_mass(&mut self) {
         self.mm = 0.0;
         for (i, mmi_gerg) in MMI_GERG.iter().enumerate().skip(1) {
             self.mm += self.x[i] * mmi_gerg;
@@ -4257,7 +4257,7 @@ impl Gerg2008 {
     }
 
     pub fn properties(&mut self) -> f64 {
-        self.molarmass();
+        self.molar_mass();
         self.alpha0();
         self.alphar(1);
 

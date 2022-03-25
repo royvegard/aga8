@@ -27,7 +27,7 @@ fn bench_detail_density(c: &mut Criterion) {
 
     c.bench_function("Detail_density", |b| {
         b.iter(|| {
-            aga8_test.density_detail();
+            aga8_test.density();
         })
     });
 }
@@ -42,11 +42,11 @@ fn bench_detail_properties(c: &mut Criterion) {
     ];
     aga8_test.p = 50_000.0;
     aga8_test.t = 400.0;
-    aga8_test.density_detail();
+    aga8_test.density();
 
     c.bench_function("Detail_properties", |b| {
         b.iter(|| {
-            aga8_test.properties_detail();
+            aga8_test.properties();
         })
     });
 }
@@ -72,7 +72,7 @@ fn bench_gerg_density(c: &mut Criterion) {
         0.00024, 0.00015, 0.00009, 0.004, 0.005, 0.002, 0.0001, 0.0025, 0.007, 0.001,
     ];
     gerg_test.setup();
-    gerg_test.molarmass();
+    gerg_test.molar_mass();
     gerg_test.t = 400.0;
     gerg_test.p = 50000.0;
     gerg_test.d = 6.36570;
@@ -91,7 +91,7 @@ fn bench_gerg_properties(c: &mut Criterion) {
         0.00024, 0.00015, 0.00009, 0.004, 0.005, 0.002, 0.0001, 0.0025, 0.007, 0.001,
     ];
     gerg_test.setup();
-    gerg_test.molarmass();
+    gerg_test.molar_mass();
     gerg_test.t = 400.0;
     gerg_test.p = 50000.0;
     gerg_test.d = 6.36570;

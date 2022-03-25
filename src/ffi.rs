@@ -43,7 +43,7 @@ pub struct Properties {
 /// # AGA8 detail functions
 pub mod detail {
     use super::*;
-    use crate::detail::{Detail, NC_DETAIL};
+    use crate::detail::{Detail, NC};
     use std::slice;
 
     /// # Convenience function
@@ -60,18 +60,18 @@ pub mod detail {
     ) -> Properties {
         let array = {
             assert!(!composition.is_null());
-            slice::from_raw_parts(composition, NC_DETAIL)
+            slice::from_raw_parts(composition, NC)
         };
 
         let mut aga8_test: Detail = Detail::new();
         aga8_test.setup();
 
-        aga8_test.x[0..NC_DETAIL].clone_from_slice(array);
+        aga8_test.x[0..NC].clone_from_slice(array);
 
         aga8_test.t = temperature;
         aga8_test.p = pressure;
-        aga8_test.density_detail();
-        aga8_test.properties_detail();
+        aga8_test.density();
+        aga8_test.properties();
 
         Properties {
             d: aga8_test.d, // Molar concentration [mol/l]
@@ -126,8 +126,8 @@ pub mod detail {
         assert!(!ptr.is_null());
         assert!(!composition.is_null());
         let aga8 = &mut *ptr;
-        let array = slice::from_raw_parts(composition, NC_DETAIL);
-        aga8.x[0..NC_DETAIL].clone_from_slice(array);
+        let array = slice::from_raw_parts(composition, NC);
+        aga8.x[0..NC].clone_from_slice(array);
     }
 
     /// # Safety
@@ -215,7 +215,7 @@ pub mod detail {
     pub unsafe extern "C" fn aga8_calculate_pressure(ptr: *mut Detail) {
         assert!(!ptr.is_null());
         let aga8 = &mut *ptr;
-        aga8.pressure_detail();
+        aga8.pressure();
     }
 
     /// # Safety
@@ -224,7 +224,7 @@ pub mod detail {
     pub unsafe extern "C" fn aga8_calculate_density(ptr: *mut Detail) {
         assert!(!ptr.is_null());
         let aga8 = &mut *ptr;
-        aga8.density_detail();
+        aga8.density();
     }
 
     /// # Safety
@@ -233,7 +233,7 @@ pub mod detail {
     pub unsafe extern "C" fn aga8_calculate_properties(ptr: *mut Detail) {
         assert!(!ptr.is_null());
         let aga8 = &mut *ptr;
-        aga8.properties_detail();
+        aga8.properties();
     }
 }
 
