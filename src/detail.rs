@@ -1,4 +1,4 @@
-//! AGA8 calculations
+//! The AGA8 DETAIL equation of state.
 
 pub const NC_DETAIL: usize = 21;
 const MAXFLDS: usize = 21;
@@ -761,14 +761,12 @@ impl Default for Detail {
 }
 
 impl Detail {
+    /// Constructs a new Detail struct
     pub fn new() -> Self {
         Default::default()
     }
 
     /// Initialize all the constants and parameters in the DETAIL model.
-    ///
-    /// Some values are modified for calculations that do not depend
-    /// on [`t`], D, and x in order to speed up the program.
     pub fn setup(&mut self) {
         for i in 0..MAXFLDS {
             self.ki25[i] = KI[i].powf(2.5);
@@ -964,8 +962,8 @@ impl Detail {
         }
     }
 
-    /// Calculate molar mass of the mixture with the compositions
-    /// contained in the x() input array
+    /// Calculates molar mass of the gas composition
+    ///
     /// ## Returns:
     /// - mm - Molar mass (g/mol)
     pub fn molar_mass_detail(&mut self) -> f64 {
@@ -977,7 +975,7 @@ impl Detail {
         mm
     }
 
-    /// Calculate terms dependent only on composition
+    // Calculate terms dependent only on composition
     fn x_terms(&mut self) {
         let mut xij: f64;
         let mut xi2: f64;
@@ -1259,9 +1257,12 @@ impl Detail {
         }
     }
 
-    /// Calculate density as a function of temperature and pressure.  This is an iterative routine that calls PressureDetail
-    /// to find the correct state point.  Generally only 6 iterations at most are required.
+    /// Calculate density as a function of temperature and pressure.
+    ///
+    /// This is an iterative routine that calls PressureDetail
+    /// to find the correct state point. Generally only 6 iterations at most are required.
     /// If the iteration fails to converge, the ideal gas density and an error message are returned.
+    ///
     /// No checks are made to determine the phase boundary, which would have guaranteed that the output is in the gas phase.
     /// It is up to the user to locate the phase boundary, and thus identify the phase of the T and P inputs.
     /// If the state point is 2-phase, the output density will represent a metastable state.
@@ -1310,7 +1311,9 @@ impl Detail {
         self.d
     }
 
-    /// Calculate pressure as a function of temperature and density.  The derivative d(P)/d(D) is also calculated
+    /// Calculate pressure as a function of temperature and density.
+    ///
+    /// The derivative d(P)/d(D) is also calculated
     /// for use in the iterative DensityDetail subroutine (and is only returned as a common variable).
     pub fn pressure_detail(&mut self) -> f64 {
         self.x_terms();
@@ -1321,8 +1324,12 @@ impl Detail {
         p
     }
 
-    /// Calculate thermodynamic properties as a function of temperature and density.  Calls are made to the subroutines
-    /// Molarmass, Alpha0Detail, and AlpharDetail.  If the density is not known, call subroutine DensityDetail first
+    /// Calculate thermodynamic properties as a function of temperature and density.
+    ///
+    /// Calls are made to the subroutines
+    /// Molarmass, Alpha0Detail, and AlpharDetail.
+    ///
+    /// If the density is not known, call subroutine DensityDetail first
     /// with the known values of pressure and temperature.
     pub fn properties_detail(&mut self) {
         let mm = self.molar_mass_detail();

@@ -1,3 +1,5 @@
+//! The GERG2008 equation of state.
+
 const RGERG: f64 = 8.314_472;
 pub const NC_GERG: usize = 21;
 const MAXFLDS: usize = 21;

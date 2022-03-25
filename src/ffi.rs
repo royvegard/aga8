@@ -1,3 +1,7 @@
+//! # Foreign Function Interface
+//! The foreign function interface modules have functions that can be used by
+//! other programming languages, through a dynamic library.
+
 /// Return type
 #[repr(C)]
 pub struct Properties {
@@ -36,11 +40,16 @@ pub struct Properties {
     pub kappa: f64,
 }
 
+/// # AGA8 detail functions
 pub mod detail {
     use super::*;
     use crate::detail::{Detail, NC_DETAIL};
     use std::slice;
 
+    /// # Convenience function
+    /// This is a convenience function that does all of the steps needed
+    /// to calculate all of the properties that aga8 can calculate.
+    ///
     /// # Safety
     /// composition must be an array of 21 elements.
     #[no_mangle]
@@ -83,11 +92,14 @@ pub mod detail {
         }
     }
 
+    /// Alocates memory for an aga8 Detail struct.
+    /// This handle is used when calling the rest of the aga8 detail functions.
     #[no_mangle]
     pub extern "C" fn aga8_new() -> *mut Detail {
         Box::into_raw(Box::new(Detail::new()))
     }
 
+    /// # Frees the memory used by ptr.
     /// # Safety
     ///
     #[no_mangle]
