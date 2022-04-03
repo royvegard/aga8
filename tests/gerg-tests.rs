@@ -1,4 +1,5 @@
 use aga8::gerg2008::Gerg2008;
+use aga8::Composition;
 
 #[test]
 fn gerg_demo_example() {
@@ -6,10 +7,31 @@ fn gerg_demo_example() {
 
     gerg_test.setup();
 
-    gerg_test.x = [
-        0.0, 0.77824, 0.02, 0.06, 0.08, 0.03, 0.0015, 0.003, 0.0005, 0.00165, 0.00215, 0.00088,
-        0.00024, 0.00015, 0.00009, 0.004, 0.005, 0.002, 0.0001, 0.0025, 0.007, 0.001,
-    ];
+    let comp = Composition {
+        methane: 0.77824,
+        nitrogen: 0.02,
+        carbon_dioxide: 0.06,
+        ethane: 0.08,
+        propane: 0.03,
+        isobutane: 0.0015,
+        n_butane: 0.003,
+        isopentane: 0.0005,
+        n_pentane: 0.00165,
+        hexane: 0.00215,
+        heptane: 0.00088,
+        octane: 0.00024,
+        nonane: 0.00015,
+        decane: 0.00009,
+        hydrogen: 0.004,
+        oxygen: 0.005,
+        carbon_monoxide: 0.002,
+        water: 0.0001,
+        hydrogen_sulfide: 0.0025,
+        helium: 0.007,
+        argon: 0.001,
+    };
+
+    gerg_test.set_composition(&comp);
 
     gerg_test.molar_mass();
 

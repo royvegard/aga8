@@ -1,5 +1,7 @@
 //! The GERG2008 equation of state.
 
+use crate::Composition;
+
 const RGERG: f64 = 8.314_472;
 pub const NC_GERG: usize = 21;
 const MAXFLDS: usize = 21;
@@ -4152,6 +4154,31 @@ impl Gerg2008 {
             self.n0i[i][2] -= t0;
             self.n0i[i][1] -= d0.ln();
         }
+    }
+
+    pub fn set_composition(&mut self, comp: &Composition) {
+        self.x[0] = 0.0;
+        self.x[1] = comp.methane;
+        self.x[2] = comp.nitrogen;
+        self.x[3] = comp.carbon_dioxide;
+        self.x[4] = comp.ethane;
+        self.x[5] = comp.propane;
+        self.x[6] = comp.isobutane;
+        self.x[7] = comp.n_butane;
+        self.x[8] = comp.isopentane;
+        self.x[9] = comp.n_pentane;
+        self.x[10] = comp.hexane;
+        self.x[11] = comp.heptane;
+        self.x[12] = comp.octane;
+        self.x[13] = comp.nonane;
+        self.x[14] = comp.decane;
+        self.x[15] = comp.hydrogen;
+        self.x[16] = comp.oxygen;
+        self.x[17] = comp.carbon_monoxide;
+        self.x[18] = comp.water;
+        self.x[19] = comp.hydrogen_sulfide;
+        self.x[20] = comp.helium;
+        self.x[21] = comp.argon;
     }
 
     pub fn molar_mass(&mut self) {

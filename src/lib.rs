@@ -78,5 +78,30 @@ assert!((1.173 - aga8_test.z).abs() < 1.0e-3);
 pub mod detail;
 pub mod gerg2008;
 
+#[derive(Default)]
+pub struct Composition {
+    pub methane: f64,
+    pub nitrogen: f64,
+    pub carbon_dioxide: f64,
+    pub ethane: f64,
+    pub propane: f64,
+    pub isobutane: f64,
+    pub n_butane: f64,
+    pub isopentane: f64,
+    pub n_pentane: f64,
+    pub hexane: f64,
+    pub heptane: f64,
+    pub octane: f64,
+    pub nonane: f64,
+    pub decane: f64,
+    pub hydrogen: f64,
+    pub oxygen: f64,
+    pub carbon_monoxide: f64,
+    pub water: f64,
+    pub hydrogen_sulfide: f64,
+    pub helium: f64,
+    pub argon: f64,
+}
+
 #[cfg(feature = "extern")]
 pub mod ffi;
