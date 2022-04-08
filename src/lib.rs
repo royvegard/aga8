@@ -78,6 +78,7 @@ assert!((1.173 - aga8_test.z).abs() < 1.0e-3);
 pub mod detail;
 pub mod gerg2008;
 
+#[repr(C)]
 #[derive(Default)]
 pub struct Composition {
     pub methane: f64,

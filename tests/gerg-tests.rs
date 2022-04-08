@@ -124,3 +124,51 @@ fn gerg_api_test_01() {
         assert!(f64::abs(result.d - 7.730_483_295_277_388) < 1.0e-10);
     }
 }
+
+#[cfg(feature = "extern")]
+#[test]
+fn gerg_api_test_02() {
+    use aga8::ffi::gerg2008::*;
+
+    let comp = Composition {
+        methane: 0.77824,
+        nitrogen: 0.02,
+        carbon_dioxide: 0.06,
+        ethane: 0.08,
+        propane: 0.03,
+        isobutane: 0.0015,
+        n_butane: 0.003,
+        isopentane: 0.0005,
+        n_pentane: 0.00165,
+        hexane: 0.00215,
+        heptane: 0.00088,
+        octane: 0.00024,
+        nonane: 0.00015,
+        decane: 0.00009,
+        hydrogen: 0.004,
+        oxygen: 0.005,
+        carbon_monoxide: 0.002,
+        water: 0.0001,
+        hydrogen_sulfide: 0.0025,
+        helium: 0.007,
+        argon: 0.001,
+    };
+
+    let temperature = 400.0;
+    let pressure = 50_000.0;
+
+    unsafe {
+        let g_test = gerg_new();
+        gerg_setup(g_test);
+        gerg_set_composition(g_test, &comp);
+        gerg_set_temperature(g_test, temperature);
+        gerg_set_pressure(g_test, pressure);
+        gerg_calculate_density(g_test);
+        gerg_calculate_properties(g_test);
+
+        let results = gerg_get_properties(g_test);
+        assert!(f64::abs(results.d - 12.798_286_260_820_62) < 1.0e-10);
+
+        gerg_free(g_test);
+    }
+}

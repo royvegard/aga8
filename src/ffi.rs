@@ -44,6 +44,7 @@ pub struct Properties {
 pub mod detail {
     use super::*;
     use crate::detail::{Detail, NC};
+    use crate::Composition;
     use std::slice;
 
     /// # Convenience function
@@ -122,12 +123,10 @@ pub mod detail {
     /// # Safety
     ///
     #[no_mangle]
-    pub unsafe extern "C" fn aga8_set_composition(ptr: *mut Detail, composition: *const f64) {
+    pub unsafe extern "C" fn aga8_set_composition(ptr: *mut Detail, composition: &Composition) {
         assert!(!ptr.is_null());
-        assert!(!composition.is_null());
         let aga8 = &mut *ptr;
-        let array = slice::from_raw_parts(composition, NC);
-        aga8.x[0..NC].clone_from_slice(array);
+        aga8.set_composition(composition);
     }
 
     /// # Safety
@@ -240,6 +239,7 @@ pub mod detail {
 pub mod gerg2008 {
     use super::*;
     use crate::gerg2008::{Gerg2008, NC_GERG};
+    use crate::Composition;
     use std::slice;
 
     /// # Safety
@@ -329,12 +329,10 @@ pub mod gerg2008 {
     /// # Safety
     ///
     #[no_mangle]
-    pub unsafe extern "C" fn gerg_set_composition(ptr: *mut Gerg2008, composition: *const f64) {
+    pub unsafe extern "C" fn gerg_set_composition(ptr: *mut Gerg2008, composition: &Composition) {
         assert!(!ptr.is_null());
-        assert!(!composition.is_null());
         let gerg = &mut *ptr;
-        let array = slice::from_raw_parts(composition, NC_GERG);
-        gerg.x[1..=NC_GERG].clone_from_slice(array);
+        gerg.set_composition(composition);
     }
 
     /// # Safety
