@@ -5,8 +5,6 @@ use aga8::Composition;
 fn gerg_demo_example() {
     let mut gerg_test: Gerg2008 = Gerg2008::new();
 
-    gerg_test.setup();
-
     let comp = Composition {
         methane: 0.77824,
         nitrogen: 0.02,
@@ -84,8 +82,6 @@ fn gerg_api_call() {
 fn gerg_test_01() {
     let mut gerg_test: Gerg2008 = Gerg2008::new();
 
-    gerg_test.setup();
-
     gerg_test.x = [
         0.0, 0.965, 0.003, 0.006, 0.018, 0.0045, 0.001, 0.001, 0.0005, 0.0003, 0.0007, 0.0, 0.0,
         0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
@@ -159,7 +155,6 @@ fn gerg_api_test_02() {
 
     unsafe {
         let g_test = gerg_new();
-        gerg_setup(g_test);
         gerg_set_composition(g_test, &comp);
         gerg_set_temperature(g_test, temperature);
         gerg_set_pressure(g_test, pressure);

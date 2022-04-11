@@ -2368,10 +2368,12 @@ pub struct Gerg2008 {
 
 impl Gerg2008 {
     pub fn new() -> Self {
-        Default::default()
+        let mut item: Self = Default::default();
+        item.setup();
+        item
     }
 
-    pub fn setup(&mut self) {
+    fn setup(&mut self) {
         const RS: f64 = 8.31451;
         const RSR: f64 = RS / RGERG;
         let mut vc3 = [0.0; MAXFLDS + 1];

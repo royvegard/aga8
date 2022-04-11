@@ -2,8 +2,7 @@ use aga8::detail::Detail;
 
 #[test]
 fn test_gas_2() {
-    let mut aga8_test: Detail = Detail::default();
-    aga8_test.setup();
+    let mut aga8_test: Detail = Detail::new();
     aga8_test.x = [
         0.996_953_100, // Methane
         0.002_016_000, // Nitrogen

@@ -4,8 +4,6 @@ use aga8::Composition;
 fn detail_demo_example() {
     let mut aga_test = aga8::detail::Detail::new();
 
-    aga_test.setup();
-
     let comp = Composition {
         methane: 0.77824,
         nitrogen: 0.02,
@@ -111,7 +109,6 @@ fn detail_api_test_02() {
 
     unsafe {
         let d_test = aga8_new();
-        aga8_setup(d_test);
         aga8_set_composition(d_test, &comp);
         aga8_set_temperature(d_test, temperature);
         aga8_set_pressure(d_test, pressure);

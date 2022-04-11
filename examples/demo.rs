@@ -3,8 +3,6 @@ use aga8::detail::Detail;
 fn main() {
     let mut aga8_test: Detail = Detail::new();
 
-    // Run seup() first to set up internal values
-    aga8_test.setup();
     // Set the gas composition in mol fraction
     // The sum of all the components must be 1.0
     aga8_test.x = [

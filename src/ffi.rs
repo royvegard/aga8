@@ -65,7 +65,6 @@ pub mod detail {
         };
 
         let mut aga8_test: Detail = Detail::new();
-        aga8_test.setup();
 
         aga8_test.x[0..NC].clone_from_slice(array);
 
@@ -109,15 +108,6 @@ pub mod detail {
             return;
         }
         Box::from_raw(ptr);
-    }
-
-    /// # Safety
-    ///
-    #[no_mangle]
-    pub unsafe extern "C" fn aga8_setup(ptr: *mut Detail) {
-        assert!(!ptr.is_null());
-        let aga8 = &mut *ptr;
-        aga8.setup();
     }
 
     /// # Safety
@@ -271,7 +261,6 @@ pub mod gerg2008 {
         let array = slice::from_raw_parts(composition, NC_GERG);
 
         let mut gerg_test: Gerg2008 = Gerg2008::new();
-        gerg_test.setup();
 
         gerg_test.x[1..=NC_GERG].clone_from_slice(array);
         gerg_test.t = temperature;
@@ -315,15 +304,6 @@ pub mod gerg2008 {
             return;
         }
         Box::from_raw(ptr);
-    }
-
-    /// # Safety
-    ///
-    #[no_mangle]
-    pub unsafe extern "C" fn gerg_setup(ptr: *mut Gerg2008) {
-        assert!(!ptr.is_null());
-        let gerg = &mut *ptr;
-        gerg.setup();
     }
 
     /// # Safety

@@ -615,8 +615,6 @@ const TH0I: [[f64; 7]; MAXFLDS] = [
 ///
 /// let mut aga8_test: Detail = Detail::new();
 ///
-/// // Run seup() first to set up internal values
-/// aga8_test.setup();
 /// // Set the gas composition in mol fraction
 /// // The sum of all the components must be 1.0
 /// aga8_test.x = [
@@ -766,11 +764,13 @@ impl Default for Detail {
 impl Detail {
     /// Constructs a new Detail struct
     pub fn new() -> Self {
-        Default::default()
+        let mut item: Self = Default::default();
+        item.setup();
+        item
     }
 
     /// Initialize all the constants and parameters in the DETAIL model.
-    pub fn setup(&mut self) {
+    fn setup(&mut self) {
         for i in 0..MAXFLDS {
             self.ki25[i] = KI[i].powf(2.5);
             self.ei25[i] = EI[i].powf(2.5);
