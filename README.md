@@ -18,34 +18,36 @@ Note that the gas composition is an array of excactly 21 components that must be
 
 ```Rust
 use aga8::detail::Detail;
+use aga8::Composition;
 
 let mut aga8_test: Detail = Detail::new();
 
 // Set the gas composition in mol fraction
 // The sum of all the components must be 1.0
-aga8_test.x = [
-    0.778_240, // Methane
-    0.020_000, // Nitrogen
-    0.060_000, // Carbon dioxide
-    0.080_000, // Ethane
-    0.030_000, // Propane
-    0.001_500, // Isobutane
-    0.003_000, // n-Butane
-    0.000_500, // Isopentane
-    0.001_650, // n-Pentane
-    0.002_150, // Hexane
-    0.000_880, // Heptane
-    0.000_240, // Octane
-    0.000_150, // Nonane
-    0.000_090, // Decane
-    0.004_000, // Hydrogen
-    0.005_000, // Oxygen
-    0.002_000, // Carbon monoxide
-    0.000_100, // Water
-    0.002_500, // Hydrogen sulfide
-    0.007_000, // Helium
-    0.001_000, // Argon
-];
+let comp = Composition {
+    methane: 0.778_24,
+    nitrogen: 0.02,
+    carbon_dioxide: 0.06,
+    ethane: 0.08,
+    propane: 0.03,
+    isobutane: 0.001_5,
+    n_butane: 0.003,
+    isopentane: 0.000_5,
+    n_pentane: 0.001_65,
+    hexane: 0.002_15,
+    heptane: 0.000_88,
+    octane: 0.000_24,
+    nonane: 0.000_15,
+    decane: 0.000_09,
+    hydrogen: 0.004,
+    oxygen: 0.005,
+    carbon_monoxide: 0.002,
+    water: 0.000_1,
+    hydrogen_sulfide: 0.002_5,
+    helium: 0.007,
+    argon: 0.001,
+};
+aga8_test.set_composition(&comp);
 // Set pressure in kPa
 aga8_test.p = 50_000.0;
 // Set temperature in K

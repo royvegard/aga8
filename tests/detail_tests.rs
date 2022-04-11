@@ -1,8 +1,9 @@
+use aga8::detail::Detail;
 use aga8::Composition;
 
 #[test]
 fn detail_demo_example() {
-    let mut aga_test = aga8::detail::Detail::new();
+    let mut aga_test = Detail::new();
 
     let comp = Composition {
         methane: 0.77824,
