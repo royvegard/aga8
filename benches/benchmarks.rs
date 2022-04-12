@@ -1,5 +1,3 @@
-extern crate criterion;
-
 use aga8::detail::Detail;
 use aga8::gerg2008::Gerg2008;
 use criterion::{criterion_group, criterion_main, Criterion};

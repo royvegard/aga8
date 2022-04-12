@@ -1,35 +1,35 @@
 use aga8::detail::Detail;
 use aga8::Composition;
 
+const COMP_FULL: Composition = Composition {
+    methane: 0.778_24,
+    nitrogen: 0.02,
+    carbon_dioxide: 0.06,
+    ethane: 0.08,
+    propane: 0.03,
+    isobutane: 0.001_5,
+    n_butane: 0.003,
+    isopentane: 0.000_5,
+    n_pentane: 0.001_65,
+    hexane: 0.002_15,
+    heptane: 0.000_88,
+    octane: 0.000_24,
+    nonane: 0.000_15,
+    decane: 0.000_09,
+    hydrogen: 0.004,
+    oxygen: 0.005,
+    carbon_monoxide: 0.002,
+    water: 0.000_1,
+    hydrogen_sulfide: 0.002_5,
+    helium: 0.007,
+    argon: 0.001,
+};
+
 #[test]
 fn detail_demo_example() {
     let mut aga_test = Detail::new();
 
-    let comp = Composition {
-        methane: 0.77824,
-        nitrogen: 0.02,
-        carbon_dioxide: 0.06,
-        ethane: 0.08,
-        propane: 0.03,
-        isobutane: 0.0015,
-        n_butane: 0.003,
-        isopentane: 0.0005,
-        n_pentane: 0.00165,
-        hexane: 0.00215,
-        heptane: 0.00088,
-        octane: 0.00024,
-        nonane: 0.00015,
-        decane: 0.00009,
-        hydrogen: 0.004,
-        oxygen: 0.005,
-        carbon_monoxide: 0.002,
-        water: 0.0001,
-        hydrogen_sulfide: 0.0025,
-        helium: 0.007,
-        argon: 0.001,
-    };
-
-    aga_test.set_composition(&comp);
+    aga_test.set_composition(&COMP_FULL);
 
     aga_test.molar_mass();
 
@@ -81,36 +81,12 @@ fn detail_api_test_01() {
 fn detail_api_test_02() {
     use aga8::ffi::detail::*;
 
-    let comp = Composition {
-        methane: 0.77824,
-        nitrogen: 0.02,
-        carbon_dioxide: 0.06,
-        ethane: 0.08,
-        propane: 0.03,
-        isobutane: 0.0015,
-        n_butane: 0.003,
-        isopentane: 0.0005,
-        n_pentane: 0.00165,
-        hexane: 0.00215,
-        heptane: 0.00088,
-        octane: 0.00024,
-        nonane: 0.00015,
-        decane: 0.00009,
-        hydrogen: 0.004,
-        oxygen: 0.005,
-        carbon_monoxide: 0.002,
-        water: 0.0001,
-        hydrogen_sulfide: 0.0025,
-        helium: 0.007,
-        argon: 0.001,
-    };
-
     let temperature = 400.0;
     let pressure = 50_000.0;
 
     unsafe {
         let d_test = aga8_new();
-        aga8_set_composition(d_test, &comp);
+        aga8_set_composition(d_test, &COMP_FULL);
         aga8_set_temperature(d_test, temperature);
         aga8_set_pressure(d_test, pressure);
         aga8_calculate_density(d_test);

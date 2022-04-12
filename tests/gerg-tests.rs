@@ -1,35 +1,59 @@
 use aga8::gerg2008::Gerg2008;
 use aga8::Composition;
 
+const COMP_FULL: Composition = Composition {
+    methane: 0.778_24,
+    nitrogen: 0.02,
+    carbon_dioxide: 0.06,
+    ethane: 0.08,
+    propane: 0.03,
+    isobutane: 0.001_5,
+    n_butane: 0.003,
+    isopentane: 0.000_5,
+    n_pentane: 0.001_65,
+    hexane: 0.002_15,
+    heptane: 0.000_88,
+    octane: 0.000_24,
+    nonane: 0.000_15,
+    decane: 0.000_09,
+    hydrogen: 0.004,
+    oxygen: 0.005,
+    carbon_monoxide: 0.002,
+    water: 0.000_1,
+    hydrogen_sulfide: 0.002_5,
+    helium: 0.007,
+    argon: 0.001,
+};
+
+const COMP_PARTIAL: Composition = Composition {
+    methane: 0.965,
+    nitrogen: 0.003,
+    carbon_dioxide: 0.006,
+    ethane: 0.018,
+    propane: 0.004_5,
+    isobutane: 0.001,
+    n_butane: 0.001,
+    isopentane: 0.000_5,
+    n_pentane: 0.000_3,
+    hexane: 0.000_7,
+    heptane: 0.0,
+    octane: 0.0,
+    nonane: 0.0,
+    decane: 0.0,
+    hydrogen: 0.0,
+    oxygen: 0.0,
+    carbon_monoxide: 0.0,
+    water: 0.0,
+    hydrogen_sulfide: 0.0,
+    helium: 0.0,
+    argon: 0.0,
+};
+
 #[test]
 fn gerg_demo_example() {
     let mut gerg_test: Gerg2008 = Gerg2008::new();
 
-    let comp = Composition {
-        methane: 0.77824,
-        nitrogen: 0.02,
-        carbon_dioxide: 0.06,
-        ethane: 0.08,
-        propane: 0.03,
-        isobutane: 0.0015,
-        n_butane: 0.003,
-        isopentane: 0.0005,
-        n_pentane: 0.00165,
-        hexane: 0.00215,
-        heptane: 0.00088,
-        octane: 0.00024,
-        nonane: 0.00015,
-        decane: 0.00009,
-        hydrogen: 0.004,
-        oxygen: 0.005,
-        carbon_monoxide: 0.002,
-        water: 0.0001,
-        hydrogen_sulfide: 0.0025,
-        helium: 0.007,
-        argon: 0.001,
-    };
-
-    gerg_test.set_composition(&comp);
+    gerg_test.set_composition(&COMP_FULL);
 
     gerg_test.molar_mass();
 
@@ -82,10 +106,7 @@ fn gerg_api_call() {
 fn gerg_test_01() {
     let mut gerg_test: Gerg2008 = Gerg2008::new();
 
-    gerg_test.x = [
-        0.0, 0.965, 0.003, 0.006, 0.018, 0.0045, 0.001, 0.001, 0.0005, 0.0003, 0.0007, 0.0, 0.0,
-        0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-    ];
+    gerg_test.set_composition(&COMP_PARTIAL);
 
     gerg_test.t = 18.0 + 273.15;
     gerg_test.p = 14601.325;
@@ -126,36 +147,12 @@ fn gerg_api_test_01() {
 fn gerg_api_test_02() {
     use aga8::ffi::gerg2008::*;
 
-    let comp = Composition {
-        methane: 0.77824,
-        nitrogen: 0.02,
-        carbon_dioxide: 0.06,
-        ethane: 0.08,
-        propane: 0.03,
-        isobutane: 0.0015,
-        n_butane: 0.003,
-        isopentane: 0.0005,
-        n_pentane: 0.00165,
-        hexane: 0.00215,
-        heptane: 0.00088,
-        octane: 0.00024,
-        nonane: 0.00015,
-        decane: 0.00009,
-        hydrogen: 0.004,
-        oxygen: 0.005,
-        carbon_monoxide: 0.002,
-        water: 0.0001,
-        hydrogen_sulfide: 0.0025,
-        helium: 0.007,
-        argon: 0.001,
-    };
-
     let temperature = 400.0;
     let pressure = 50_000.0;
 
     unsafe {
         let g_test = gerg_new();
-        gerg_set_composition(g_test, &comp);
+        gerg_set_composition(g_test, &COMP_FULL);
         gerg_set_temperature(g_test, temperature);
         gerg_set_pressure(g_test, pressure);
         gerg_calculate_density(g_test);
