@@ -14,8 +14,6 @@ Lastly you call the `density()` and `properties()` functions to calculate the mo
 
 All of the calculation results are public fields in the struct that was created with `new()`.
 
-Note that the gas composition is an array of excactly 21 components that must be in the order shown in the example.
-
 ```Rust
 use aga8::detail::Detail;
 use aga8::Composition;

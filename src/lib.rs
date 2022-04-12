@@ -11,8 +11,6 @@ Lastly you call the `density()` and `properties()` functions to calculate the mo
 
 All of the calculation results are public fields in the struct that was created with `new()`.
 
-Note that the gas composition is an array of excactly 21 components that must be in the order shown in the example.
-
 ```
 use aga8::detail::Detail;
 use aga8::Composition;
@@ -68,6 +66,24 @@ assert!((1.173 - aga8_test.z).abs() < 1.0e-3);
 pub mod detail;
 pub mod gerg2008;
 
+/// A complete gas composition made up of gas components.
+///
+/// A gas composition contains 21 gas components named by the field names in the struct.
+/// The unit for each component is *mole fraction*, so the sum of all components should be `1.0`.
+///
+/// # Example
+/// ```
+/// let air = aga8::Composition {
+///     nitrogen: 0.78,
+///     oxygen: 0.21,
+///     argon: 0.009,
+///     carbon_dioxide: 0.000_4,
+///     water: 0.000_6,
+///     ..Default::default()
+///     };
+///
+/// assert!((air.sum() - 1.0).abs() < 1.0e-10);
+/// ```
 #[repr(C)]
 #[derive(Default)]
 pub struct Composition {
@@ -92,6 +108,86 @@ pub struct Composition {
     pub hydrogen_sulfide: f64,
     pub helium: f64,
     pub argon: f64,
+}
+
+impl Composition {
+    /// Compute the sum of all components.
+    ///
+    /// # Example
+    /// ```
+    /// let comp = aga8::Composition {
+    ///     methane: 50.0,
+    ///     ethane: 25.0,
+    ///     carbon_dioxide: 25.0,
+    ///     ..Default::default()
+    /// };
+    ///
+    /// assert!((comp.sum() - 100.0).abs() < 1.0e-10);
+    /// ```
+    pub fn sum(&self) -> f64 {
+        self.methane
+            + self.nitrogen
+            + self.carbon_dioxide
+            + self.ethane
+            + self.propane
+            + self.isobutane
+            + self.n_butane
+            + self.isopentane
+            + self.n_pentane
+            + self.hexane
+            + self.heptane
+            + self.octane
+            + self.nonane
+            + self.decane
+            + self.hydrogen
+            + self.oxygen
+            + self.carbon_monoxide
+            + self.water
+            + self.hydrogen_sulfide
+            + self.helium
+            + self.argon
+    }
+
+    /// Normalizes the composition sum to 1.0.
+    ///
+    /// # Example
+    /// ```
+    /// let mut comp = aga8::Composition {
+    ///     methane: 50.0,
+    ///     ethane: 50.0,
+    ///     ..Default::default()
+    /// };
+    ///
+    /// comp.normalize();
+    ///
+    /// assert!((comp.ethane - 0.5).abs() < 1.0e-10);
+    /// assert!((comp.methane - 0.5).abs() < 1.0e-10);
+    /// ```
+    pub fn normalize(&mut self) {
+        let factor = 1.0 / self.sum();
+
+        self.methane *= factor;
+        self.nitrogen *= factor;
+        self.carbon_dioxide *= factor;
+        self.ethane *= factor;
+        self.propane *= factor;
+        self.isobutane *= factor;
+        self.n_butane *= factor;
+        self.isopentane *= factor;
+        self.n_pentane *= factor;
+        self.hexane *= factor;
+        self.heptane *= factor;
+        self.octane *= factor;
+        self.nonane *= factor;
+        self.decane *= factor;
+        self.hydrogen *= factor;
+        self.oxygen *= factor;
+        self.carbon_monoxide *= factor;
+        self.water *= factor;
+        self.hydrogen_sulfide *= factor;
+        self.helium *= factor;
+        self.argon *= factor;
+    }
 }
 
 #[cfg(feature = "extern")]

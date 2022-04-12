@@ -1,6 +1,6 @@
 //! # Foreign Function Interface
 //! The foreign function interface modules have functions that can be used by
-//! other programming languages, through a dynamic library.
+//! other programming languages.
 
 /// Return type
 #[repr(C)]
