@@ -3,7 +3,7 @@
 use crate::Composition;
 
 const RGERG: f64 = 8.314_472;
-pub const NC_GERG: usize = 21;
+pub(crate) const NC_GERG: usize = 21;
 const MAXFLDS: usize = 21;
 const MAXMDL: usize = 10;
 const MAXTRMM: usize = 12;
