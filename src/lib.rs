@@ -188,6 +188,28 @@ impl Composition {
         self.helium *= factor;
         self.argon *= factor;
     }
+
+    /// Checks that the composition is valid.
+    ///
+    /// # Example
+    /// ```
+    /// let mut comp = aga8::Composition {
+    ///     methane: 0.5,
+    ///     ethane: 0.5,
+    ///     ..Default::default()
+    /// };
+    ///
+    /// assert!(comp.check());
+    /// ```
+    pub fn check(&self) -> bool {
+        if (self.sum() - 0.0).abs() < 1.0e-10 {
+            return false;
+        }
+        if (self.sum() - 1.0).abs() > 1.0e-10 {
+            return false;
+        }
+        true
+    }
 }
 
 #[cfg(feature = "extern")]
