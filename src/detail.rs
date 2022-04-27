@@ -1,6 +1,6 @@
 //! The AGA8 DETAIL equation of state.
 
-use crate::Composition;
+use crate::composition::Composition;
 
 pub(crate) const NC: usize = 21;
 const MAXFLDS: usize = 21;

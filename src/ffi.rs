@@ -43,8 +43,8 @@ pub struct Properties {
 /// # AGA8 detail functions
 pub mod detail {
     use super::*;
+    use crate::composition::Composition;
     use crate::detail::{Detail, NC};
-    use crate::Composition;
     use std::slice;
 
     /// # Convenience function
@@ -228,8 +228,8 @@ pub mod detail {
 
 pub mod gerg2008 {
     use super::*;
+    use crate::composition::{Composition, CompositionError};
     use crate::gerg2008::{Gerg2008, NC_GERG};
-    use crate::Composition;
     use std::slice;
 
     /// # Safety
@@ -309,10 +309,18 @@ pub mod gerg2008 {
     /// # Safety
     ///
     #[no_mangle]
-    pub unsafe extern "C" fn gerg_set_composition(ptr: *mut Gerg2008, composition: &Composition) {
+    pub unsafe extern "C" fn gerg_set_composition(
+        ptr: *mut Gerg2008,
+        composition: &Composition,
+        _err: &mut CompositionError,
+    ) {
         assert!(!ptr.is_null());
         let gerg = &mut *ptr;
-        gerg.set_composition(composition);
+
+        match gerg.set_composition(composition) {
+            Ok(_) => *_err = CompositionError::Ok,
+            Err(e) => *_err = e,
+        }
     }
 
     /// # Safety

@@ -1,6 +1,6 @@
 //! The GERG2008 equation of state.
 
-use crate::Composition;
+use crate::composition::{Composition, CompositionError};
 
 const RGERG: f64 = 8.314_472;
 pub(crate) const NC_GERG: usize = 21;
@@ -4158,7 +4158,9 @@ impl Gerg2008 {
         }
     }
 
-    pub fn set_composition(&mut self, comp: &Composition) {
+    pub fn set_composition(&mut self, comp: &Composition) -> Result<(), CompositionError> {
+        comp.check()?;
+
         self.x[0] = 0.0;
         self.x[1] = comp.methane;
         self.x[2] = comp.nitrogen;
@@ -4181,6 +4183,8 @@ impl Gerg2008 {
         self.x[19] = comp.hydrogen_sulfide;
         self.x[20] = comp.helium;
         self.x[21] = comp.argon;
+
+        Ok(())
     }
 
     pub fn molar_mass(&mut self) {

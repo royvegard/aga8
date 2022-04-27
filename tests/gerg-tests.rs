@@ -1,5 +1,5 @@
+use aga8::composition::Composition;
 use aga8::gerg2008::Gerg2008;
-use aga8::Composition;
 
 const COMP_FULL: Composition = Composition {
     methane: 0.778_24,
@@ -53,7 +53,7 @@ const COMP_PARTIAL: Composition = Composition {
 fn gerg_demo_example() {
     let mut gerg_test: Gerg2008 = Gerg2008::new();
 
-    gerg_test.set_composition(&COMP_FULL);
+    gerg_test.set_composition(&COMP_FULL).unwrap();
 
     gerg_test.molar_mass();
 
@@ -106,7 +106,7 @@ fn gerg_api_call() {
 fn gerg_test_01() {
     let mut gerg_test: Gerg2008 = Gerg2008::new();
 
-    gerg_test.set_composition(&COMP_PARTIAL);
+    gerg_test.set_composition(&COMP_PARTIAL).unwrap();
 
     gerg_test.t = 18.0 + 273.15;
     gerg_test.p = 14601.325;
@@ -145,14 +145,18 @@ fn gerg_api_test_01() {
 #[cfg(feature = "extern")]
 #[test]
 fn gerg_api_test_02() {
-    use aga8::ffi::gerg2008::*;
+    use aga8::{composition::CompositionError, ffi::gerg2008::*};
 
     let temperature = 400.0;
     let pressure = 50_000.0;
 
     unsafe {
         let g_test = gerg_new();
-        gerg_set_composition(g_test, &COMP_FULL);
+        let mut err: CompositionError = CompositionError::Ok;
+        gerg_set_composition(g_test, &COMP_FULL, &mut err);
+        if err != CompositionError::Ok {
+            panic!("Invalid composition: {:?}", err);
+        }
         gerg_set_temperature(g_test, temperature);
         gerg_set_pressure(g_test, pressure);
         gerg_calculate_density(g_test);
@@ -163,4 +167,17 @@ fn gerg_api_test_02() {
 
         gerg_free(g_test);
     }
+}
+
+#[test]
+#[should_panic]
+fn gerg_zero_composition() {
+    let mut gerg_test = Gerg2008::new();
+
+    let comp = Composition {
+        methane: 0.0,
+        ..Default::default()
+    };
+
+    gerg_test.set_composition(&comp).unwrap();
 }

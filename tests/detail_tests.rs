@@ -1,5 +1,5 @@
+use aga8::composition::Composition;
 use aga8::detail::Detail;
-use aga8::Composition;
 
 const COMP_FULL: Composition = Composition {
     methane: 0.778_24,
