@@ -189,4 +189,17 @@ mod tests {
 
         assert_eq!(comp.check(), Err(CompositionError::BadSum));
     }
+
+    #[test]
+    fn normalized_is_1() {
+        let mut comp = Composition {
+            methane: 83.0,
+            ethane: 17.0,
+            ..Default::default()
+        };
+
+        comp.normalize();
+
+        assert_eq!(comp.sum(), 1.0);
+    }
 }
