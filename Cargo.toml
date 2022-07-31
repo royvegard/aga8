@@ -32,3 +32,4 @@ harness = false
 
 [build-dependencies]
 winres = "0.1"
+cbindgen = "0.24.3"
