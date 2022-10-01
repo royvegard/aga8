@@ -5,29 +5,31 @@ fn main() {
 
     // Set the gas composition in mol fraction
     // The sum of all the components must be 1.0
-    aga8_test.x = [
-        0.778_240, // Methane
-        0.020_000, // Nitrogen
-        0.060_000, // Carbon dioxide
-        0.080_000, // Ethane
-        0.030_000, // Propane
-        0.001_500, // Isobutane
-        0.003_000, // n-Butane
-        0.000_500, // Isopentane
-        0.001_650, // n-Pentane
-        0.002_150, // Hexane
-        0.000_880, // Heptane
-        0.000_240, // Octane
-        0.000_150, // Nonane
-        0.000_090, // Decane
-        0.004_000, // Hydrogen
-        0.005_000, // Oxygen
-        0.002_000, // Carbon monoxide
-        0.000_100, // Water
-        0.002_500, // Hydrogen sulfide
-        0.007_000, // Helium
-        0.001_000, // Argon
-    ];
+    let composition = aga8::composition::Composition {
+        methane: 0.778_240,
+        nitrogen: 0.020_000,
+        carbon_dioxide: 0.060_000,
+        ethane: 0.080_000,
+        propane: 0.030_000,
+        isobutane: 0.001_500,
+        n_butane: 0.003_000,
+        isopentane: 0.000_500,
+        n_pentane: 0.001_650,
+        hexane: 0.002_150,
+        heptane: 0.000_880,
+        octane: 0.000_240,
+        nonane: 0.000_150,
+        decane: 0.000_090,
+        hydrogen: 0.004_000,
+        oxygen: 0.005_000,
+        carbon_monoxide: 0.002_000,
+        water: 0.000_100,
+        hydrogen_sulfide: 0.002_500,
+        helium: 0.007_000,
+        argon: 0.001_000,
+    };
+
+    aga8_test.set_composition(&composition);
 
     // Set pressure in kPA
     aga8_test.p = 50_000.0;
