@@ -21,7 +21,11 @@ fn main() {
         .write_to_file(&output_file);
 
     if cfg!(target_os = "windows") {
-        let res = winres::WindowsResource::new();
+        let mut res = winres::WindowsResource::new();
+        let version = retrieve_app_version_from_git_repository();
+        if version != None {
+            res.set("ProductVersion", &version.unwrap());
+        }
         res.compile().unwrap();
     }
 }
@@ -32,4 +36,12 @@ fn target_dir() -> PathBuf {
     } else {
         PathBuf::from(env::var("CARGO_MANIFEST_DIR").unwrap()).join("target")
     }
+}
+
+fn retrieve_app_version_from_git_repository() -> Option<String> {
+    { std::process::Command::new("git").args(&["describe", "--tags", "--dirty"]) }
+        .output()
+        .ok()
+        .filter(|o| o.status.success())
+        .map(|o| String::from_utf8_lossy(&o.stdout).trim().to_owned())
 }
