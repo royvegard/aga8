@@ -147,7 +147,7 @@ impl Composition {
 }
 
 #[repr(C)]
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Eq)]
 pub enum CompositionError {
     Ok = 0,
     Empty,

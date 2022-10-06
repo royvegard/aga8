@@ -29,7 +29,7 @@ const COMP_FULL: Composition = Composition {
 fn detail_demo_example() {
     let mut aga_test = Detail::new();
 
-    aga_test.set_composition(&COMP_FULL);
+    aga_test.set_composition(&COMP_FULL).unwrap();
 
     aga_test.molar_mass();
 
@@ -79,14 +79,15 @@ fn detail_api_test_01() {
 #[cfg(feature = "extern")]
 #[test]
 fn detail_api_test_02() {
-    use aga8::ffi::detail::*;
+    use aga8::{composition::CompositionError, ffi::detail::*};
 
     let temperature = 400.0;
     let pressure = 50_000.0;
 
     unsafe {
         let d_test = aga8_new();
-        aga8_set_composition(d_test, &COMP_FULL);
+        let mut err: CompositionError = CompositionError::Ok;
+        aga8_set_composition(d_test, &COMP_FULL, &mut err);
         aga8_set_temperature(d_test, temperature);
         aga8_set_pressure(d_test, pressure);
         aga8_calculate_density(d_test);

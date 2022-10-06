@@ -43,7 +43,7 @@ pub struct Properties {
 /// # AGA8 detail functions
 pub mod detail {
     use super::*;
-    use crate::composition::Composition;
+    use crate::composition::{Composition, CompositionError};
     use crate::detail::{Detail, NC};
     use std::slice;
 
@@ -107,16 +107,24 @@ pub mod detail {
         if ptr.is_null() {
             return;
         }
-        Box::from_raw(ptr);
+        drop(Box::from_raw(ptr));
     }
 
     /// # Safety
     ///
     #[no_mangle]
-    pub unsafe extern "C" fn aga8_set_composition(ptr: *mut Detail, composition: &Composition) {
+    pub unsafe extern "C" fn aga8_set_composition(
+        ptr: *mut Detail,
+        composition: &Composition,
+        _err: &mut CompositionError,
+    ) {
         assert!(!ptr.is_null());
         let aga8 = &mut *ptr;
-        aga8.set_composition(composition);
+
+        match aga8.set_composition(composition) {
+            Ok(_) => *_err = CompositionError::Ok,
+            Err(e) => *_err = e,
+        }
     }
 
     /// # Safety
@@ -303,7 +311,7 @@ pub mod gerg2008 {
         if ptr.is_null() {
             return;
         }
-        Box::from_raw(ptr);
+        drop(Box::from_raw(ptr));
     }
 
     /// # Safety

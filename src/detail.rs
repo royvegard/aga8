@@ -1,6 +1,6 @@
 //! The AGA8 DETAIL equation of state.
 
-use crate::composition::Composition;
+use crate::composition::{Composition, CompositionError};
 
 pub(crate) const NC: usize = 21;
 const MAXFLDS: usize = 21;
@@ -965,7 +965,9 @@ impl Detail {
         }
     }
 
-    pub fn set_composition(&mut self, comp: &Composition) {
+    pub fn set_composition(&mut self, comp: &Composition) -> Result<(), CompositionError> {
+        comp.check()?;
+
         self.x[0] = comp.methane;
         self.x[1] = comp.nitrogen;
         self.x[2] = comp.carbon_dioxide;
@@ -987,6 +989,8 @@ impl Detail {
         self.x[18] = comp.hydrogen_sulfide;
         self.x[19] = comp.helium;
         self.x[20] = comp.argon;
+
+        Ok(())
     }
 
     /// Calculates molar mass of the gas composition
