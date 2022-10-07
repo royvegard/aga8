@@ -61,7 +61,7 @@ pub mod detail {
         if ptr.is_null() {
             return;
         }
-        Box::from_raw(ptr);
+        drop(Box::from_raw(ptr));
     }
 
     /// # Safety
@@ -201,7 +201,7 @@ pub mod gerg2008 {
         if ptr.is_null() {
             return;
         }
-        Box::from_raw(ptr);
+        drop(Box::from_raw(ptr));
     }
 
     /// # Safety
