@@ -29,7 +29,7 @@ fn main() {
         argon: 0.001_000,
     };
 
-    aga8_test.set_composition(&composition);
+    aga8_test.set_composition(&composition).unwrap();
 
     // Set pressure in kPA
     aga8_test.p = 50_000.0;
