@@ -44,53 +44,7 @@ pub struct Properties {
 pub mod detail {
     use super::*;
     use crate::composition::{Composition, CompositionError};
-    use crate::detail::{Detail, NC};
-    use std::slice;
-
-    /// # Convenience function
-    /// This is a convenience function that does all of the steps needed
-    /// to calculate all of the properties that aga8 can calculate.
-    ///
-    /// # Safety
-    /// composition must be an array of 21 elements.
-    #[no_mangle]
-    pub unsafe extern "C" fn aga8_2017(
-        composition: *const f64,
-        pressure: f64,
-        temperature: f64,
-    ) -> Properties {
-        let array = {
-            assert!(!composition.is_null());
-            slice::from_raw_parts(composition, NC)
-        };
-
-        let mut aga8_test: Detail = Detail::new();
-
-        aga8_test.x[0..NC].clone_from_slice(array);
-
-        aga8_test.t = temperature;
-        aga8_test.p = pressure;
-        aga8_test.density();
-        aga8_test.properties();
-
-        Properties {
-            d: aga8_test.d, // Molar concentration [mol/l]
-            mm: aga8_test.mm,
-            z: aga8_test.z,
-            dp_dd: aga8_test.dp_dd,
-            d2p_dd2: aga8_test.d2p_dd2,
-            dp_dt: aga8_test.dp_dt,
-            u: aga8_test.u,
-            h: aga8_test.h,
-            s: aga8_test.s,
-            cv: aga8_test.cv,
-            cp: aga8_test.cp,
-            w: aga8_test.w,
-            g: aga8_test.g,
-            jt: aga8_test.jt,
-            kappa: aga8_test.kappa,
-        }
-    }
+    use crate::detail::Detail;
 
     /// Alocates memory for an aga8 Detail struct.
     /// This handle is used when calling the rest of the aga8 detail functions.
@@ -107,7 +61,7 @@ pub mod detail {
         if ptr.is_null() {
             return;
         }
-        drop(Box::from_raw(ptr));
+        drop(drop(Box::from_raw(ptr)));
     }
 
     /// # Safety
@@ -237,63 +191,7 @@ pub mod detail {
 pub mod gerg2008 {
     use super::*;
     use crate::composition::{Composition, CompositionError};
-    use crate::gerg2008::{Gerg2008, NC_GERG};
-    use std::slice;
-
-    /// # Safety
-    ///
-    /// # Examples
-    /// ```
-    /// let composition: [f64; 21] = [
-    /// 0.77824, 0.02, 0.06, 0.08, 0.03, 0.0015, 0.003, 0.0005, 0.00165, 0.00215, 0.00088, 0.00024,
-    /// 0.00015, 0.00009, 0.004, 0.005, 0.002, 0.0001, 0.0025, 0.007, 0.001,
-    /// ];
-    ///
-    /// let temperature = 400.0;
-    /// let pressure = 50000.0;
-    ///
-    /// unsafe {
-    ///     let result = aga8::ffi::gerg2008::gerg_2008(&composition[0], pressure, temperature);
-    ///
-    ///     assert!(f64::abs(result.d - 12.798_286_260_820_62) < 1.0e-10);
-    /// }
-    /// ```
-
-    #[no_mangle]
-    pub unsafe extern "C" fn gerg_2008(
-        composition: *const f64,
-        pressure: f64,
-        temperature: f64,
-    ) -> Properties {
-        assert!(!composition.is_null());
-        let array = slice::from_raw_parts(composition, NC_GERG);
-
-        let mut gerg_test: Gerg2008 = Gerg2008::new();
-
-        gerg_test.x[1..=NC_GERG].clone_from_slice(array);
-        gerg_test.t = temperature;
-        gerg_test.p = pressure;
-        gerg_test.density(0);
-        gerg_test.properties();
-
-        Properties {
-            d: gerg_test.d, // Molar concentration [mol/l]
-            mm: gerg_test.mm,
-            z: gerg_test.z,
-            dp_dd: gerg_test.dp_dd,
-            d2p_dd2: gerg_test.d2p_dd2,
-            dp_dt: gerg_test.dp_dt,
-            u: gerg_test.u,
-            h: gerg_test.h,
-            s: gerg_test.s,
-            cv: gerg_test.cv,
-            cp: gerg_test.cp,
-            w: gerg_test.w,
-            g: gerg_test.g,
-            jt: gerg_test.jt,
-            kappa: gerg_test.kappa,
-        }
-    }
+    use crate::gerg2008::Gerg2008;
 
     /// Create a Gerg2008 type
     ///

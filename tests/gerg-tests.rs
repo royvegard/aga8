@@ -83,25 +83,6 @@ fn gerg_demo_example() {
     assert!(f64::abs(gerg_test.kappa - 2.683_820_255_058_032) < 1.0e-10);
 }
 
-#[cfg(feature = "extern")]
-#[test]
-fn gerg_api_call() {
-    use aga8::ffi::gerg2008::*;
-
-    let composition: [f64; 21] = [
-        0.77824, 0.02, 0.06, 0.08, 0.03, 0.0015, 0.003, 0.0005, 0.00165, 0.00215, 0.00088, 0.00024,
-        0.00015, 0.00009, 0.004, 0.005, 0.002, 0.0001, 0.0025, 0.007, 0.001,
-    ];
-
-    let temperature = 400.0;
-    let pressure = 50000.0;
-
-    unsafe {
-        let result = gerg_2008(&composition[0], pressure, temperature);
-        assert!(f64::abs(result.d - 12.798_286_260_820_62) < 1.0e-10);
-    }
-}
-
 #[test]
 fn gerg_test_01() {
     let mut gerg_test: Gerg2008 = Gerg2008::new();
@@ -120,26 +101,6 @@ fn gerg_test_01() {
 
     assert!(f64::abs(gerg_test.d - 7.730_483_295_277_388) < 1.0e-10);
     assert!(f64::abs(gerg_test.mm - 16.803_030_286) < 1.0e-10);
-}
-
-#[cfg(feature = "extern")]
-#[test]
-fn gerg_api_test_01() {
-    use aga8::ffi::gerg2008::*;
-
-    let composition: [f64; 21] = [
-        0.965, 0.003, 0.006, 0.018, 0.0045, 0.001, 0.001, 0.0005, 0.0003, 0.0007, 0.0, 0.0, 0.0,
-        0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-    ];
-
-    let temperature = 18.0 + 273.15;
-    let pressure = 14601.325;
-
-    unsafe {
-        let result = gerg_2008(&composition[0], pressure, temperature);
-
-        assert!(f64::abs(result.d - 7.730_483_295_277_388) < 1.0e-10);
-    }
 }
 
 #[cfg(feature = "extern")]
