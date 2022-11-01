@@ -61,7 +61,7 @@ pub mod detail {
         if ptr.is_null() {
             return;
         }
-        drop(drop(Box::from_raw(ptr)));
+        drop(Box::from_raw(ptr));
     }
 
     /// # Safety
