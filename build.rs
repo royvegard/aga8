@@ -22,11 +22,11 @@ fn main() {
 
     if cfg!(target_os = "windows") {
         let mut res = winres::WindowsResource::new();
-        let version = retrieve_app_version_from_git_repository();
-        if version != None {
-            let version = version.unwrap();
+
+        if let Some(version) = retrieve_app_version_from_git_repository() {
             res.set("FileDescription", &version);
         }
+
         res.compile().unwrap();
     }
 }
@@ -40,7 +40,7 @@ fn target_dir() -> PathBuf {
 }
 
 fn retrieve_app_version_from_git_repository() -> Option<String> {
-    { std::process::Command::new("git").args(&["describe", "--tags", "--dirty"]) }
+    { std::process::Command::new("git").args(["describe", "--tags", "--dirty"]) }
         .output()
         .ok()
         .filter(|o| o.status.success())
