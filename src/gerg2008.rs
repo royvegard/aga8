@@ -4522,7 +4522,7 @@ impl Gerg2008 {
                                 self.ar[0][1] += ndtd;
                                 self.ar[0][2] += ndtd * (self.dijk[mn][k] as f64 - 1.0);
                                 if itau > 0 {
-                                    ndtt = ndt * self.tijk[mn][k] as f64;
+                                    ndtt = ndt * self.tijk[mn][k];
                                     self.ar[0][0] += ndt;
                                     self.ar[1][0] += ndtt;
                                     self.ar[2][0] += ndtt * (self.tijk[mn][k] - 1.0);
