@@ -2,6 +2,13 @@
 
 use crate::composition::{Composition, CompositionError};
 
+#[repr(C)]
+#[derive(Debug, PartialEq, Eq)]
+pub enum DensityError {
+    Ok,
+    IterationFail,
+}
+
 const RGERG: f64 = 8.314_472;
 pub(crate) const NC_GERG: usize = 21;
 const MAXFLDS: usize = 21;
@@ -4202,7 +4209,7 @@ impl Gerg2008 {
         p
     }
 
-    pub fn density(&mut self, iflag: i32) {
+    pub fn density(&mut self, iflag: i32) -> Result<(), DensityError> {
         let mut nfail: i32 = 0;
         let mut ifail: i32 = 0;
         const TOLR: f64 = 0.000_000_1;
@@ -4277,9 +4284,9 @@ impl Gerg2008 {
                                 //herr = "Calculation failed to converge in GERG method, ideal gas density returned.";
                                 self.d = self.p / RGERG / self.t;
                             }
-                            return;
+                            return Err(DensityError::IterationFail);
                         }
-                        return; // Iteration converged
+                        return Ok(()); // Iteration converged
                     }
                 }
             }
@@ -4287,6 +4294,7 @@ impl Gerg2008 {
         // Iteration failed (above loop did not find a solution or checks made below indicate possible 2-phase state)
         //herr = "Calculation failed to converge in GERG method, ideal gas density returned.";
         self.d = self.p / RGERG / self.t;
+        Err(DensityError::IterationFail)
     }
 
     pub fn properties(&mut self) -> f64 {

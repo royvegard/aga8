@@ -191,7 +191,7 @@ pub mod detail {
 pub mod gerg2008 {
     use super::*;
     use crate::composition::{Composition, CompositionError};
-    use crate::gerg2008::Gerg2008;
+    use crate::gerg2008::{DensityError, Gerg2008};
 
     /// Create a Gerg2008 type
     ///
@@ -322,10 +322,13 @@ pub mod gerg2008 {
     /// # Safety
     ///
     #[no_mangle]
-    pub unsafe extern "C" fn gerg_calculate_density(ptr: *mut Gerg2008) {
+    pub unsafe extern "C" fn gerg_calculate_density(ptr: *mut Gerg2008, _err: &mut DensityError) {
         assert!(!ptr.is_null());
         let gerg = &mut *ptr;
-        gerg.density(0);
+        match gerg.density(0) {
+            Ok(_) => *_err = DensityError::Ok,
+            Err(e) => *_err = e,
+        }
     }
 
     /// # Safety

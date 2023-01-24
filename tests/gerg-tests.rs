@@ -62,7 +62,7 @@ fn gerg_demo_example() {
     gerg_test.d = 6.36570;
     gerg_test.z = 0.0;
 
-    gerg_test.density(0);
+    gerg_test.density(0).unwrap();
     gerg_test.properties();
 
     assert!(f64::abs(gerg_test.d - 12.798_286_260_820_62) < 1.0e-10);
@@ -92,7 +92,7 @@ fn gerg_test_01() {
     gerg_test.t = 18.0 + 273.15;
     gerg_test.p = 14601.325;
 
-    gerg_test.density(0);
+    gerg_test.density(0).unwrap();
     gerg_test.properties();
 
     println!("{}", gerg_test.d);
@@ -106,7 +106,7 @@ fn gerg_test_01() {
 #[cfg(feature = "extern")]
 #[test]
 fn gerg_api_test_02() {
-    use aga8::{composition::CompositionError, ffi::gerg2008::*};
+    use aga8::{composition::CompositionError, ffi::gerg2008::*, gerg2008::DensityError};
 
     let temperature = 400.0;
     let pressure = 50_000.0;
@@ -114,13 +114,17 @@ fn gerg_api_test_02() {
     unsafe {
         let g_test = gerg_new();
         let mut err: CompositionError = CompositionError::Ok;
+        let mut dens_err: DensityError = DensityError::Ok;
         gerg_set_composition(g_test, &COMP_FULL, &mut err);
         if err != CompositionError::Ok {
             panic!("Invalid composition: {:?}", err);
         }
         gerg_set_temperature(g_test, temperature);
         gerg_set_pressure(g_test, pressure);
-        gerg_calculate_density(g_test);
+        gerg_calculate_density(g_test, &mut dens_err);
+        if dens_err != DensityError::Ok {
+            panic!("Density calculation failed: {:?}", dens_err);
+        }
         gerg_calculate_properties(g_test);
 
         let results = gerg_get_properties(g_test);

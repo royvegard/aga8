@@ -97,30 +97,36 @@ impl Composition {
     /// assert!((comp.ethane - 0.5).abs() < 1.0e-10);
     /// assert!((comp.methane - 0.5).abs() < 1.0e-10);
     /// ```
-    pub fn normalize(&mut self) {
-        let factor = 1.0 / self.sum();
+    pub fn normalize(&mut self) -> Result<(), CompositionError> {
+        let sum = self.sum();
+        if sum > 0.0 {
+            let factor = 1.0 / sum;
 
-        self.methane *= factor;
-        self.nitrogen *= factor;
-        self.carbon_dioxide *= factor;
-        self.ethane *= factor;
-        self.propane *= factor;
-        self.isobutane *= factor;
-        self.n_butane *= factor;
-        self.isopentane *= factor;
-        self.n_pentane *= factor;
-        self.hexane *= factor;
-        self.heptane *= factor;
-        self.octane *= factor;
-        self.nonane *= factor;
-        self.decane *= factor;
-        self.hydrogen *= factor;
-        self.oxygen *= factor;
-        self.carbon_monoxide *= factor;
-        self.water *= factor;
-        self.hydrogen_sulfide *= factor;
-        self.helium *= factor;
-        self.argon *= factor;
+            self.methane *= factor;
+            self.nitrogen *= factor;
+            self.carbon_dioxide *= factor;
+            self.ethane *= factor;
+            self.propane *= factor;
+            self.isobutane *= factor;
+            self.n_butane *= factor;
+            self.isopentane *= factor;
+            self.n_pentane *= factor;
+            self.hexane *= factor;
+            self.heptane *= factor;
+            self.octane *= factor;
+            self.nonane *= factor;
+            self.decane *= factor;
+            self.hydrogen *= factor;
+            self.oxygen *= factor;
+            self.carbon_monoxide *= factor;
+            self.water *= factor;
+            self.hydrogen_sulfide *= factor;
+            self.helium *= factor;
+            self.argon *= factor;
+        } else {
+            return Err(CompositionError::Empty);
+        }
+        Ok(())
     }
 
     /// Checks that the composition is valid.
@@ -198,8 +204,17 @@ mod tests {
             ..Default::default()
         };
 
-        comp.normalize();
+        comp.normalize().unwrap();
 
         assert_eq!(comp.sum(), 1.0);
+    }
+
+    #[test]
+    fn normalize_empty_is_error() {
+        let mut comp = Composition {
+            ..Default::default()
+        };
+
+        assert_eq!(comp.normalize(), Err(CompositionError::Empty));
     }
 }

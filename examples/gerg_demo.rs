@@ -25,7 +25,7 @@ fn main() {
         gerg_test.p
     );
 
-    gerg_test.density(0);
+    gerg_test.density(0).unwrap();
 
     gerg_test.properties();
 
