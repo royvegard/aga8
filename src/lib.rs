@@ -1,3 +1,5 @@
+#![warn(missing_docs)]
+
 /*!
 Provides methods to calculate thermodynamic properties inlcuding compressibility factors and densities of natural gases.
 It includes the AGA8 DETAIL and the GERG2008 equations of state described in AGA Report No. 8, Part 1, Third Edition, April 2017.

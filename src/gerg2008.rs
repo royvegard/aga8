@@ -2300,6 +2300,62 @@ const GTIJ: [[f64; MAXFLDS + 1]; MAXFLDS + 1] = [
 
 /// Implements the GERG2008 equation of state described in
 /// AGA Report No. 8, Part 2, First Edition, April 2017.
+///
+/// The Gerg2008 struct has functions to set the gas composition, pressure and temperature.
+/// It also has functions to calculate the density and other properties.
+/// After the properties have been calculated they can be read by reading the public Fields of the Gerg2008 struct.
+///
+/// Before attempting to calculate density and properties, the composition, pressure and temperature should be set.
+/// If these are not set to reasonable values, the [`density()`](Gerg2008::density) function will most likely return Err Result, and the property fileds will contain nonsensical values.
+///
+/// # Example
+/// ```
+/// use aga8::gerg2008::Gerg2008;
+/// use aga8::composition::Composition;
+///
+/// let mut gerg_test: Gerg2008 = Gerg2008::new();
+///
+/// // Set the gas composition in mol fraction
+/// // The sum of all the components must be 1.0
+/// let comp = Composition {
+///     methane: 0.778_24,
+///     nitrogen: 0.02,
+///     carbon_dioxide: 0.06,
+///     ethane: 0.08,
+///     propane: 0.03,
+///     isobutane: 0.001_5,
+///     n_butane: 0.003,
+///     isopentane: 0.000_5,
+///     n_pentane: 0.001_65,
+///     hexane: 0.002_15,
+///     heptane: 0.000_88,
+///     octane: 0.000_24,
+///     nonane: 0.000_15,
+///     decane: 0.000_09,
+///     hydrogen: 0.004,
+///     oxygen: 0.005,
+///     carbon_monoxide: 0.002,
+///     water: 0.000_1,
+///     hydrogen_sulfide: 0.002_5,
+///     helium: 0.007,
+///     argon: 0.001,
+/// };
+/// gerg_test.set_composition(&comp);
+/// // Set pressure in kPa
+/// gerg_test.p = 50_000.0;
+/// // Set temperature in K
+/// gerg_test.t = 400.0;
+/// // Run density to calculate the density in mol/l
+/// gerg_test.density(0);
+/// // Run properties to calculate all of the
+/// // output properties
+/// gerg_test.properties();
+///
+/// // Molar density
+/// assert!((12.798 - gerg_test.d).abs() < 1.0e-3);
+/// // Compressibility factor
+/// assert!((1.175 - gerg_test.z).abs() < 1.0e-3);
+/// ```
 #[derive(Default)]
 pub struct Gerg2008 {
     /// Temperature in K
@@ -2374,6 +2430,7 @@ pub struct Gerg2008 {
 }
 
 impl Gerg2008 {
+    /// Creates a new instance of the Gerg2008 struct.
     pub fn new() -> Self {
         let mut item: Self = Default::default();
         item.setup();
@@ -4165,6 +4222,10 @@ impl Gerg2008 {
         }
     }
 
+    /// Checks and sets the composition.
+    ///
+    /// ## Error
+    /// Returns error if the composition is invalid.
     pub fn set_composition(&mut self, comp: &Composition) -> Result<(), CompositionError> {
         comp.check()?;
 
@@ -4194,6 +4255,27 @@ impl Gerg2008 {
         Ok(())
     }
 
+    /// Calculates the molar mass of the current composition.
+    ///
+    /// # Example
+    /// ```
+    /// use aga8::gerg2008::Gerg2008;
+    /// use aga8::composition::Composition;
+    ///
+    /// let mut gerg_test: Gerg2008 = Gerg2008::new();
+    /// let air = aga8::composition::Composition {
+    ///     nitrogen: 0.78,
+    ///     oxygen: 0.21,
+    ///     argon: 0.009,
+    ///     carbon_dioxide: 0.000_4,
+    ///     water: 0.000_6,
+    ///     ..Default::default()
+    ///     };
+    ///
+    /// gerg_test.set_composition(&air);
+    /// gerg_test.molar_mass();
+    /// assert!((28.958 - gerg_test.mm).abs() < 1.0e-3);
+    /// ```
     pub fn molar_mass(&mut self) {
         self.mm = 0.0;
         for (i, mmi_gerg) in MMI_GERG.iter().enumerate().skip(1) {
