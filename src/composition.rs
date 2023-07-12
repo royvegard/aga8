@@ -4,6 +4,7 @@
 ///
 /// A gas composition contains 21 gas components named by the field names in the struct.
 /// The unit for each component is *mole fraction*, so the sum of all components should be `1.0`.
+/// If the initial sum of components is not `1.0`, you can use the normalize function to scale it to `1.0`.
 ///
 /// # Example
 /// ```
@@ -21,26 +22,47 @@
 #[repr(C)]
 #[derive(Default)]
 pub struct Composition {
+    /// Methane CH~4~
     pub methane: f64,
+    /// Nitrogen N
     pub nitrogen: f64,
+    /// Carbon Dioxide CO~2~
     pub carbon_dioxide: f64,
+    /// Ethane C~2~H~6~
     pub ethane: f64,
+    /// Propane C~3~H~8~
     pub propane: f64,
+    /// Isobutane C~4~H~10~
     pub isobutane: f64,
+    /// Butane C~4~H~10~
     pub n_butane: f64,
+    /// Isopentane C~5~H~12~
     pub isopentane: f64,
+    /// Pentane C~5~H~12~
     pub n_pentane: f64,
+    /// Isopentane C~6~H~14~
     pub hexane: f64,
+    /// Heptane C~7~H~16~
     pub heptane: f64,
+    /// Octane C~8~H~18~
     pub octane: f64,
+    /// Nonane C~9~H~20~
     pub nonane: f64,
+    /// Decane C~10~H~22~
     pub decane: f64,
+    /// Hydrogen H
     pub hydrogen: f64,
+    /// Oxygen O
     pub oxygen: f64,
+    /// Carbon monoxide CO
     pub carbon_monoxide: f64,
+    /// Water H~2~O
     pub water: f64,
+    /// Hydrogen sulfide H~2~S
     pub hydrogen_sulfide: f64,
+    /// Helium He
     pub helium: f64,
+    /// Argon Ar
     pub argon: f64,
 }
 
