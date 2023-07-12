@@ -21,6 +21,11 @@ OriginalFilename = "aga8.dll"
 name = "aga8"
 crate-type = ["rlib", "staticlib", "cdylib"]
 
+[profile.release]
+strip = true
+opt-level = "z"
+lto = true
+
 [dependencies]
 
 [dev-dependencies]

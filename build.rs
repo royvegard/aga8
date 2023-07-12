@@ -24,7 +24,7 @@ fn main() {
         let mut res = winres::WindowsResource::new();
 
         if let Some(version) = retrieve_app_version_from_git_repository() {
-            res.set("FileDescription", &version);
+            res.set("ProductVersion", &version);
         }
 
         res.compile().unwrap();

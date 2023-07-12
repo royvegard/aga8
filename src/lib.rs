@@ -69,5 +69,13 @@ pub mod composition;
 pub mod detail;
 pub mod gerg2008;
 
+#[repr(C)]
+#[derive(Debug, PartialEq, Eq)]
+pub enum DensityError {
+    Ok,
+    IterationFail,
+    PressureTooLow,
+}
+
 #[cfg(feature = "extern")]
 pub mod ffi;

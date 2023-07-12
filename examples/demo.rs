@@ -36,7 +36,7 @@ fn main() {
     // Set temperature in K
     aga8_test.t = 400.0;
     // Run density_detail to calculate the density in mol/l
-    aga8_test.density();
+    aga8_test.density().unwrap();
     // Run properties_detail to calculate all of the
     // output properties mentioned below
     aga8_test.properties();

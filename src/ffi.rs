@@ -45,6 +45,7 @@ pub mod detail {
     use super::*;
     use crate::composition::{Composition, CompositionError};
     use crate::detail::Detail;
+    use crate::DensityError;
 
     /// Alocates memory for an aga8 Detail struct.
     /// This handle is used when calling the rest of the aga8 detail functions.
@@ -172,10 +173,14 @@ pub mod detail {
     /// # Safety
     ///
     #[no_mangle]
-    pub unsafe extern "C" fn aga8_calculate_density(ptr: *mut Detail) {
+    pub unsafe extern "C" fn aga8_calculate_density(ptr: *mut Detail, _err: &mut DensityError) {
         assert!(!ptr.is_null());
         let aga8 = &mut *ptr;
-        aga8.density();
+        match aga8.density() {
+            Ok(_) => *_err = DensityError::Ok,
+            Err(e) => *_err = e,
+        }
+
     }
 
     /// # Safety
@@ -191,7 +196,8 @@ pub mod detail {
 pub mod gerg2008 {
     use super::*;
     use crate::composition::{Composition, CompositionError};
-    use crate::gerg2008::{DensityError, Gerg2008};
+    use crate::gerg2008::Gerg2008;
+    use crate::DensityError;
 
     /// Create a Gerg2008 type
     ///

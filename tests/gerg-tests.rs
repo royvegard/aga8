@@ -106,7 +106,8 @@ fn gerg_test_01() {
 #[cfg(feature = "extern")]
 #[test]
 fn gerg_api_test_02() {
-    use aga8::{composition::CompositionError, ffi::gerg2008::*, gerg2008::DensityError};
+    use aga8::{composition::CompositionError, ffi::gerg2008::*};
+    use aga8::DensityError;
 
     let temperature = 400.0;
     let pressure = 50_000.0;

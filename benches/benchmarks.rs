@@ -14,7 +14,7 @@ fn bench_detail_density(c: &mut Criterion) {
 
     c.bench_function("Detail_density", |b| {
         b.iter(|| {
-            aga8_test.density();
+            aga8_test.density().unwrap();
         })
     });
 }
@@ -28,7 +28,7 @@ fn bench_detail_properties(c: &mut Criterion) {
     ];
     aga8_test.p = 50_000.0;
     aga8_test.t = 400.0;
-    aga8_test.density();
+    aga8_test.density().unwrap();
 
     c.bench_function("Detail_properties", |b| {
         b.iter(|| {
@@ -50,7 +50,7 @@ fn bench_gerg_density(c: &mut Criterion) {
     gerg_test.z = 0.0;
     c.bench_function("Gerg_density", |b| {
         b.iter(|| {
-            gerg_test.density(0);
+            gerg_test.density(0).unwrap();
         })
     });
 }
@@ -66,7 +66,7 @@ fn bench_gerg_properties(c: &mut Criterion) {
     gerg_test.p = 50000.0;
     gerg_test.d = 6.36570;
     gerg_test.z = 0.0;
-    gerg_test.density(0);
+    gerg_test.density(0).unwrap();
 
     c.bench_function("Gerg_properties", |b| {
         b.iter(|| {

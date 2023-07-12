@@ -1,6 +1,7 @@
 //! The AGA8 DETAIL equation of state.
 
 use crate::composition::{Composition, CompositionError};
+use crate::DensityError;
 
 pub(crate) const NC: usize = 21;
 const MAXFLDS: usize = 21;
@@ -1297,14 +1298,14 @@ impl Detail {
     /// No checks are made to determine the phase boundary, which would have guaranteed that the output is in the gas phase.
     /// It is up to the user to locate the phase boundary, and thus identify the phase of the T and P inputs.
     /// If the state point is 2-phase, the output density will represent a metastable state.
-    pub fn density(&mut self) -> f64 {
+    pub fn density(&mut self) -> Result<(), DensityError> {
         let mut dpdlv: f64;
         let mut vdiff: f64;
         let mut p2: f64;
 
         if self.p.abs() < EPSILON {
             self.d = 0.0;
-            return self.d;
+            return Err(DensityError::PressureTooLow);
         }
         const TOLR: f64 = 0.000_000_1;
         if self.d > -EPSILON {
@@ -1318,7 +1319,7 @@ impl Detail {
             if !(-7.0..=100.0).contains(&vlog) {
                 //ierr = 1; herr = "Calculation failed to converge in DETAIL method, ideal gas density returned.";
                 self.d = self.p / RDETAIL / self.t;
-                return self.d;
+                return Err(DensityError::IterationFail);
             }
             self.d = (-vlog).exp();
             p2 = self.pressure();
@@ -1333,13 +1334,13 @@ impl Detail {
                 vlog -= vdiff;
                 if vdiff.abs() < TOLR {
                     self.d = (-vlog).exp();
-                    return self.d; // Iteration converged
+                    return Ok(()); // Iteration converged
                 }
             }
         }
         //ierr = 1; herr = "Calculation failed to converge in DETAIL method, ideal gas density returned.";
         self.d = self.p / RDETAIL / self.t;
-        self.d
+        Err(DensityError::IterationFail)
     }
 
     /// Calculate pressure as a function of temperature and density.

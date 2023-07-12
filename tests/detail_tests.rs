@@ -38,7 +38,7 @@ fn detail_demo_example() {
     aga_test.d = 6.36570;
     aga_test.z = 0.0;
 
-    aga_test.density();
+    aga_test.density().unwrap();
     aga_test.properties();
 
     assert!(f64::abs(aga_test.d - 12.807_924_036_488_01) < 1.0e-10);
@@ -63,6 +63,7 @@ fn detail_demo_example() {
 #[test]
 fn detail_api_test_02() {
     use aga8::{composition::CompositionError, ffi::detail::*};
+    use aga8::DensityError;
 
     let temperature = 400.0;
     let pressure = 50_000.0;
@@ -70,10 +71,17 @@ fn detail_api_test_02() {
     unsafe {
         let d_test = aga8_new();
         let mut err: CompositionError = CompositionError::Ok;
+        let mut dens_err: DensityError = DensityError::Ok;
         aga8_set_composition(d_test, &COMP_FULL, &mut err);
+        if err != CompositionError::Ok {
+            panic!("Invalid composition: {:?}", err);
+        }
         aga8_set_temperature(d_test, temperature);
         aga8_set_pressure(d_test, pressure);
-        aga8_calculate_density(d_test);
+        aga8_calculate_density(d_test, &mut dens_err);
+        if dens_err != DensityError::Ok {
+            panic!("Density calculation failed: {:?}", dens_err);
+        }
         aga8_calculate_properties(d_test);
 
         let results = aga8_get_properties(d_test);

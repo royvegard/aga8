@@ -1,13 +1,7 @@
 //! The GERG2008 equation of state.
 
 use crate::composition::{Composition, CompositionError};
-
-#[repr(C)]
-#[derive(Debug, PartialEq, Eq)]
-pub enum DensityError {
-    Ok,
-    IterationFail,
-}
+use crate::DensityError;
 
 const RGERG: f64 = 8.314_472;
 pub(crate) const NC_GERG: usize = 21;
