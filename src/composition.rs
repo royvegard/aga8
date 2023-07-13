@@ -145,18 +145,22 @@ impl Composition {
         if (self.sum() - 0.0).abs() < 1.0e-10 {
             return Err(CompositionError::Empty);
         }
-        if (self.sum() - 1.0).abs() > 1.0e-5 {
+        if (self.sum() - 1.0).abs() > 1.0e-4 {
             return Err(CompositionError::BadSum);
         }
         Ok(())
     }
 }
 
+/// Error conditions for composition
 #[repr(C)]
 #[derive(Debug, PartialEq, Eq)]
 pub enum CompositionError {
+    /// Composition is valid
     Ok = 0,
+    /// Composition is empty, i.e. all component values are zero.
     Empty,
+    /// The sum of the components is not 1.0000
     BadSum,
 }
 
