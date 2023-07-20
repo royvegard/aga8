@@ -38,7 +38,7 @@ fn bench_detail_properties(c: &mut Criterion) {
 }
 
 fn bench_gerg_density(c: &mut Criterion) {
-    let mut gerg_test: Gerg2008 = Gerg2008::default();
+    let mut gerg_test: Gerg2008 = Gerg2008::new();
     gerg_test.x = [
         0.0, 0.77824, 0.02, 0.06, 0.08, 0.03, 0.0015, 0.003, 0.0005, 0.00165, 0.00215, 0.00088,
         0.00024, 0.00015, 0.00009, 0.004, 0.005, 0.002, 0.0001, 0.0025, 0.007, 0.001,
@@ -56,7 +56,7 @@ fn bench_gerg_density(c: &mut Criterion) {
 }
 
 fn bench_gerg_properties(c: &mut Criterion) {
-    let mut gerg_test: Gerg2008 = Gerg2008::default();
+    let mut gerg_test: Gerg2008 = Gerg2008::new();
     gerg_test.x = [
         0.0, 0.77824, 0.02, 0.06, 0.08, 0.03, 0.0015, 0.003, 0.0005, 0.00165, 0.00215, 0.00088,
         0.00024, 0.00015, 0.00009, 0.004, 0.005, 0.002, 0.0001, 0.0025, 0.007, 0.001,
