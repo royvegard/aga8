@@ -966,6 +966,7 @@ impl Detail {
         }
     }
 
+    /// Sets the composition
     pub fn set_composition(&mut self, comp: &Composition) -> Result<(), CompositionError> {
         comp.check()?;
 

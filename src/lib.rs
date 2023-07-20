@@ -69,11 +69,15 @@ pub mod composition;
 pub mod detail;
 pub mod gerg2008;
 
+/// Error conditions for density calculation
 #[repr(C)]
 #[derive(Debug, PartialEq, Eq)]
 pub enum DensityError {
+    /// Calculation was successful
     Ok,
+    /// Calculation failed to iterate
     IterationFail,
+    /// Pressure is too low
     PressureTooLow,
 }
 
