@@ -30,6 +30,7 @@ lto = true
 
 [dev-dependencies]
 criterion = "0.3"
+rand = "0.8.5"
 
 [[bench]]
 name = "benchmarks"

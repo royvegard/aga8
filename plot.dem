@@ -1,0 +1,2 @@
+set pointsize 0.5
+splot 'data.csv' title 'Temperature vs. Pressure' with dots, 'data_2.csv' title 'Failed to iterate' lc rgb "red" with points
