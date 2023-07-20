@@ -193,6 +193,7 @@ pub mod detail {
     }
 }
 
+/// # Gerg2008 functions
 pub mod gerg2008 {
     use super::*;
     use crate::composition::{Composition, CompositionError};
