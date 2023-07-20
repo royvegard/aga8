@@ -4277,6 +4277,7 @@ impl Gerg2008 {
         }
     }
 
+    /// Calculate pressure
     pub fn pressure(&mut self) -> f64 {
         self.alphar(0);
         self.z = 1.0 + self.ar[0][1];
@@ -4285,6 +4286,7 @@ impl Gerg2008 {
         p
     }
 
+    /// Calculate density
     pub fn density(&mut self, iflag: i32) -> Result<(), DensityError> {
         let mut nfail: i32 = 0;
         let mut ifail: i32 = 0;
@@ -4312,6 +4314,7 @@ impl Gerg2008 {
                     // Iteration failed (above loop did not find a solution or checks made below indicate possible 2-phase state)
                     //herr = "Calculation failed to converge in GERG method, ideal gas density returned.";
                     self.d = self.p / RGERG / self.t;
+                    return Err(DensityError::IterationFail);
                 }
                 nfail += 1;
                 if nfail == 1 {
@@ -4373,6 +4376,7 @@ impl Gerg2008 {
         Err(DensityError::IterationFail)
     }
 
+    /// Calculate properties
     pub fn properties(&mut self) -> f64 {
         self.molar_mass();
         self.alpha0();
