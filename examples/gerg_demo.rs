@@ -1,4 +1,4 @@
-use aga8::{gerg2008::Gerg2008, DensityError};
+use aga8::gerg2008::Gerg2008;
 
 fn main() {
     let mut gerg_test: Gerg2008 = Gerg2008::new();
