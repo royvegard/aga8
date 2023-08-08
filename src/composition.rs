@@ -22,33 +22,33 @@
 #[repr(C)]
 #[derive(Default)]
 pub struct Composition {
-    /// Methane CH~4~
+    /// Methane CH<sub>4</sub>
     pub methane: f64,
     /// Nitrogen N
     pub nitrogen: f64,
-    /// Carbon Dioxide CO~2~
+    /// Carbon Dioxide CO<sub>2</sub>
     pub carbon_dioxide: f64,
-    /// Ethane C~2~H~6~
+    /// Ethane C<sub>2</sub>H<sub>6</sub>
     pub ethane: f64,
-    /// Propane C~3~H~8~
+    /// Propane C<sub>3</sub>H<sub>8</sub>
     pub propane: f64,
-    /// Isobutane C~4~H~10~
+    /// Isobutane C<sub>4</sub>H<sub>10</sub>
     pub isobutane: f64,
-    /// Butane C~4~H~10~
+    /// Butane C<sub>4</sub>H<sub>10</sub>
     pub n_butane: f64,
-    /// Isopentane C~5~H~12~
+    /// Isopentane C<sub>5</sub>H<sub>12</sub>
     pub isopentane: f64,
-    /// Pentane C~5~H~12~
+    /// Pentane C<sub>5</sub>H<sub>12</sub>
     pub n_pentane: f64,
-    /// Isopentane C~6~H~14~
+    /// Isopentane C<sub>6</sub>H<sub>14</sub>
     pub hexane: f64,
-    /// Heptane C~7~H~16~
+    /// Heptane C<sub>7</sub>H<sub>16</sub>
     pub heptane: f64,
-    /// Octane C~8~H~18~
+    /// Octane C<sub>8</sub>H<sub>18</sub>
     pub octane: f64,
-    /// Nonane C~9~H~20~
+    /// Nonane C<sub>9</sub>H<sub>20</sub>
     pub nonane: f64,
-    /// Decane C~10~H~22~
+    /// Decane C<sub>10</sub>H<sub>22</sub>
     pub decane: f64,
     /// Hydrogen H
     pub hydrogen: f64,
@@ -56,9 +56,9 @@ pub struct Composition {
     pub oxygen: f64,
     /// Carbon monoxide CO
     pub carbon_monoxide: f64,
-    /// Water H~2~O
+    /// Water H<sub>2</sub>O
     pub water: f64,
-    /// Hydrogen sulfide H~2~S
+    /// Hydrogen sulfide H<sub>2</sub>S
     pub hydrogen_sulfide: f64,
     /// Helium He
     pub helium: f64,
