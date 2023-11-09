@@ -29,7 +29,7 @@ lto = true
 [dependencies]
 
 [dev-dependencies]
-criterion = "0.3"
+criterion = "0.5.1"
 rand = "0.8.5"
 
 [[bench]]
@@ -38,4 +38,4 @@ harness = false
 
 [build-dependencies]
 winres = "0.1"
-cbindgen = "0.24.3"
+cbindgen = "0.26"
