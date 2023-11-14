@@ -167,7 +167,7 @@ impl Composition {
         if (self.sum() - 0.0).abs() < 1.0e-10 {
             return Err(CompositionError::Empty);
         }
-        if (self.sum() - 1.0).abs() > 1.0e-4 {
+        if (self.sum() - 1.0).abs() > 1.0e-2 {
             return Err(CompositionError::BadSum);
         }
         Ok(())
