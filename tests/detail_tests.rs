@@ -62,8 +62,8 @@ fn detail_demo_example() {
 #[cfg(feature = "extern")]
 #[test]
 fn detail_api_test_02() {
-    use aga8::{composition::CompositionError, ffi::detail::*};
     use aga8::DensityError;
+    use aga8::{composition::CompositionError, ffi::detail::*};
 
     let temperature = 400.0;
     let pressure = 50_000.0;
@@ -86,6 +86,30 @@ fn detail_api_test_02() {
 
         let results = aga8_get_properties(d_test);
         assert!(f64::abs(results.d - 12.807_924_036_488_01) < 1.0e-10);
+
+        aga8_free(d_test);
+    }
+}
+
+#[cfg(feature = "extern")]
+#[test]
+fn detail_api_calculate_molar_mass() {
+    use aga8::DensityError;
+    use aga8::{composition::CompositionError, ffi::detail::*};
+
+    let temperature = 400.0;
+    let pressure = 50_000.0;
+
+    unsafe {
+        let d_test = aga8_new();
+        let mut err: CompositionError = CompositionError::Ok;
+        let mut dens_err: DensityError = DensityError::Ok;
+        aga8_set_composition(d_test, &COMP_FULL, &mut err);
+        if err != CompositionError::Ok {
+            panic!("Invalid composition: {:?}", err);
+        }
+
+        assert!(f64::abs(aga8_calculate_molar_mass(d_test) - 20.543_330_51) < 1.0e-10);
 
         aga8_free(d_test);
     }
