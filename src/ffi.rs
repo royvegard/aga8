@@ -164,10 +164,20 @@ pub mod detail {
     /// # Safety
     ///
     #[no_mangle]
-    pub unsafe extern "C" fn aga8_calculate_pressure(ptr: *mut Detail) {
+    pub unsafe extern "C" fn aga8_calculate_pressure(ptr: *mut Detail) -> f64 {
         assert!(!ptr.is_null());
         let aga8 = &mut *ptr;
-        aga8.pressure();
+        aga8.pressure()
+    }
+
+    /// # Safety
+    ///
+    #[no_mangle]
+    pub unsafe extern "C" fn aga8_calculate_molar_mass(ptr: *mut Detail) -> f64 {
+        assert!(!ptr.is_null());
+        let aga8 = &mut *ptr;
+        aga8.molar_mass();
+        aga8.mm
     }
 
     /// # Safety
@@ -180,7 +190,6 @@ pub mod detail {
             Ok(_) => *_err = DensityError::Ok,
             Err(e) => *_err = e,
         }
-
     }
 
     /// # Safety
@@ -318,10 +327,20 @@ pub mod gerg2008 {
     /// # Safety
     ///
     #[no_mangle]
-    pub unsafe extern "C" fn gerg_calculate_pressure(ptr: *mut Gerg2008) {
+    pub unsafe extern "C" fn gerg_calculate_pressure(ptr: *mut Gerg2008) -> f64 {
         assert!(!ptr.is_null());
         let gerg = &mut *ptr;
-        gerg.pressure();
+        gerg.pressure()
+    }
+
+    /// # Safety
+    ///
+    #[no_mangle]
+    pub unsafe extern "C" fn gerg_calculate_molar_mass(ptr: *mut Gerg2008) -> f64 {
+        assert!(!ptr.is_null());
+        let gerg = &mut *ptr;
+        gerg.molar_mass();
+        gerg.mm
     }
 
     /// Calculates the density

@@ -2,6 +2,14 @@ use aga8::detail::Detail;
 use aga8::gerg2008::Gerg2008;
 use criterion::{criterion_group, criterion_main, Criterion};
 
+fn bench_detail_new(c: &mut Criterion) {
+    c.bench_function("Detail_new", |b| {
+        b.iter(|| {
+            let mut _aga8_test: Detail = Detail::new();
+        })
+    });
+}
+
 fn bench_detail_density(c: &mut Criterion) {
     let mut aga8_test: Detail = Detail::new();
     aga8_test.x = [
@@ -33,6 +41,14 @@ fn bench_detail_properties(c: &mut Criterion) {
     c.bench_function("Detail_properties", |b| {
         b.iter(|| {
             aga8_test.properties();
+        })
+    });
+}
+
+fn bench_gerg_new(c: &mut Criterion) {
+    c.bench_function("Gerg_new", |b| {
+        b.iter(|| {
+            let mut _gerg_test: Gerg2008 = Gerg2008::new();
         })
     });
 }
@@ -77,8 +93,10 @@ fn bench_gerg_properties(c: &mut Criterion) {
 
 criterion_group!(
     benches,
+    bench_detail_new,
     bench_detail_density,
     bench_detail_properties,
+    bench_gerg_new,
     bench_gerg_density,
     bench_gerg_properties,
 );
