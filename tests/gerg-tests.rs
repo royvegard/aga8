@@ -104,6 +104,23 @@ fn gerg_test_01() {
     assert!(f64::abs(gerg_test.mm - 16.803_030_286) < 1.0e-10);
 }
 
+#[test]
+fn gerg_calculate_pressure() {
+    let mut gerg_test: Gerg2008 = Gerg2008::new();
+
+    gerg_test.set_composition(&COMP_FULL).unwrap();
+
+    gerg_test.t = 18.0 + 273.15;
+    gerg_test.d = 7.558_334;
+
+    let p = gerg_test.pressure();
+
+    println!("{}", gerg_test.d);
+    println!("{}", p);
+
+    assert!(f64::abs(p - 13_050.037_472_144) < 1.0e-10);
+}
+
 #[cfg(feature = "extern")]
 #[test]
 fn gerg_api_test_02() {
@@ -139,16 +156,11 @@ fn gerg_api_test_02() {
 #[cfg(feature = "extern")]
 #[test]
 fn gerg_api_calculate_molar_mass() {
-    use aga8::DensityError;
     use aga8::{composition::CompositionError, ffi::gerg2008::*};
-
-    let temperature = 400.0;
-    let pressure = 50_000.0;
 
     unsafe {
         let g_test = gerg_new();
         let mut err: CompositionError = CompositionError::Ok;
-        let mut dens_err: DensityError = DensityError::Ok;
         gerg_set_composition(g_test, &COMP_FULL, &mut err);
         if err != CompositionError::Ok {
             panic!("Invalid composition: {:?}", err);
