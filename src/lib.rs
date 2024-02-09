@@ -68,6 +68,7 @@ assert!((1.173 - aga8_test.z).abs() < 1.0e-3);
 pub mod composition;
 pub mod detail;
 pub mod gerg2008;
+mod gerg2008const;
 
 /// Error conditions for density calculation
 #[repr(C)]
