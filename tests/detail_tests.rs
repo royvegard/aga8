@@ -59,11 +59,28 @@ fn detail_demo_example() {
     assert!(f64::abs(aga_test.kappa - 2.672_509_225_184_606) < 1.0e-10);
 }
 
+#[test]
+fn detail_calculate_pressure() {
+    let mut aga_test = Detail::new();
+
+    aga_test.set_composition(&COMP_FULL).unwrap();
+
+    aga_test.t = 18.0 + 273.15;
+    aga_test.d = 7.558_334;
+
+    let p = aga_test.pressure();
+
+    println!("{}", aga_test.d);
+    println!("{}", p);
+
+    assert!(f64::abs(p - 13_067.068_161_509_907) < 1.0e-10);
+}
+
 #[cfg(feature = "extern")]
 #[test]
 fn detail_api_test_02() {
-    use aga8::{composition::CompositionError, ffi::detail::*};
     use aga8::DensityError;
+    use aga8::{composition::CompositionError, ffi::detail::*};
 
     let temperature = 400.0;
     let pressure = 50_000.0;
@@ -86,6 +103,25 @@ fn detail_api_test_02() {
 
         let results = aga8_get_properties(d_test);
         assert!(f64::abs(results.d - 12.807_924_036_488_01) < 1.0e-10);
+
+        aga8_free(d_test);
+    }
+}
+
+#[cfg(feature = "extern")]
+#[test]
+fn detail_api_calculate_molar_mass() {
+    use aga8::{composition::CompositionError, ffi::detail::*};
+
+    unsafe {
+        let d_test = aga8_new();
+        let mut err: CompositionError = CompositionError::Ok;
+        aga8_set_composition(d_test, &COMP_FULL, &mut err);
+        if err != CompositionError::Ok {
+            panic!("Invalid composition: {:?}", err);
+        }
+
+        assert!(f64::abs(aga8_calculate_molar_mass(d_test) - 20.543_330_51) < 1.0e-10);
 
         aga8_free(d_test);
     }
