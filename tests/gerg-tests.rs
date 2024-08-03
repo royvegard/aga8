@@ -139,7 +139,7 @@ fn gerg_api_test_02() {
         }
         gerg_set_temperature(g_test, temperature);
         gerg_set_pressure(g_test, pressure);
-        gerg_calculate_density(g_test, &mut dens_err);
+        gerg_calculate_density(g_test, 0, &mut dens_err);
         if dens_err != DensityError::Ok {
             panic!("Density calculation failed: {:?}", dens_err);
         }

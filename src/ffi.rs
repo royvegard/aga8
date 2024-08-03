@@ -348,10 +348,10 @@ pub mod gerg2008 {
     /// # Safety
     ///
     #[no_mangle]
-    pub unsafe extern "C" fn gerg_calculate_density(ptr: *mut Gerg2008, _err: &mut DensityError) {
+    pub unsafe extern "C" fn gerg_calculate_density(ptr: *mut Gerg2008, iflag: i32, _err: &mut DensityError) {
         assert!(!ptr.is_null());
         let gerg = &mut *ptr;
-        match gerg.density(0) {
+        match gerg.density(iflag) {
             Ok(_) => *_err = DensityError::Ok,
             Err(e) => *_err = e,
         }
