@@ -272,8 +272,8 @@ impl Gerg2008 {
                                 // Iteration failed (above loop did find a solution or checks made below indicate possible 2-phase state)
                                 //herr = "Calculation failed to converge in GERG method, ideal gas density returned.";
                                 self.d = self.p / RGERG / self.t;
+                                return Err(DensityError::IterationFail);
                             }
-                            return Err(DensityError::IterationFail);
                         }
                         return Ok(()); // Iteration converged
                     }
