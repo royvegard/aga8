@@ -190,6 +190,30 @@ pub enum CompositionError {
 mod tests {
     use super::*;
 
+    const COMP_FULL: Composition = Composition {
+        methane: 0.778_24,
+        nitrogen: 0.02,
+        carbon_dioxide: 0.06,
+        ethane: 0.08,
+        propane: 0.03,
+        isobutane: 0.001_5,
+        n_butane: 0.003,
+        isopentane: 0.000_5,
+        n_pentane: 0.001_65,
+        hexane: 0.002_15,
+        heptane: 0.000_88,
+        octane: 0.000_24,
+        nonane: 0.000_15,
+        decane: 0.000_09,
+        hydrogen: 0.004,
+        oxygen: 0.005,
+        carbon_monoxide: 0.002,
+        water: 0.000_1,
+        hydrogen_sulfide: 0.002_5,
+        helium: 0.007,
+        argon: 0.001,
+    };
+
     #[test]
     fn valid_is_ok() {
         let comp = Composition {
@@ -224,11 +248,7 @@ mod tests {
 
     #[test]
     fn normalized_is_1() {
-        let mut comp = Composition {
-            methane: 83.0,
-            ethane: 17.0,
-            ..Default::default()
-        };
+        let mut comp = COMP_FULL;
 
         comp.normalize().unwrap();
 
