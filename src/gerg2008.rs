@@ -263,17 +263,16 @@ impl Gerg2008 {
                         self.d = (-vlog).exp();
 
                         // If requested, check to see if point is possibly 2-phase
-                        if iflag > 0 {
-                            if (self.properties() <= 0.0
+                        if iflag > 0
+                            && ((self.properties() <= 0.0
                                 || self.dp_dd <= 0.0
                                 || self.d2p_dtd <= 0.0)
-                                || (self.cv <= 0.0 || self.cp <= 0.0 || self.w <= 0.0)
-                            {
-                                // Iteration failed (above loop did find a solution or checks made below indicate possible 2-phase state)
-                                //herr = "Calculation failed to converge in GERG method, ideal gas density returned.";
-                                self.d = self.p / RGERG / self.t;
-                                return Err(DensityError::IterationFail);
-                            }
+                                || (self.cv <= 0.0 || self.cp <= 0.0 || self.w <= 0.0))
+                        {
+                            // Iteration failed (above loop did find a solution or checks made below indicate possible 2-phase state)
+                            //herr = "Calculation failed to converge in GERG method, ideal gas density returned.";
+                            self.d = self.p / RGERG / self.t;
+                            return Err(DensityError::IterationFail);
                         }
                         return Ok(()); // Iteration converged
                     }

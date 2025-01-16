@@ -2,3 +2,4 @@
 **/*.rs.bk
 .vscode
 Cargo.lock
+/mutants.out*
