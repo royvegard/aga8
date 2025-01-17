@@ -45,14 +45,6 @@ fn bench_detail_properties(c: &mut Criterion) {
     });
 }
 
-fn bench_gerg_new(c: &mut Criterion) {
-    c.bench_function("Gerg_new", |b| {
-        b.iter(|| {
-            let mut _gerg_test: Gerg2008 = Gerg2008::new();
-        })
-    });
-}
-
 fn bench_gerg_density(c: &mut Criterion) {
     let mut gerg_test: Gerg2008 = Gerg2008::new();
     gerg_test.x = [
@@ -96,7 +88,6 @@ criterion_group!(
     bench_detail_new,
     bench_detail_density,
     bench_detail_properties,
-    bench_gerg_new,
     bench_gerg_density,
     bench_gerg_properties,
 );
