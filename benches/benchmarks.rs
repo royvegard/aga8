@@ -1,6 +1,57 @@
+#![allow(dead_code)]
+
+use aga8::composition::Composition;
 use aga8::detail::Detail;
 use aga8::gerg2008::Gerg2008;
 use criterion::{criterion_group, criterion_main, Criterion};
+
+const COMP_FULL: Composition = Composition {
+    methane: 0.778_24,
+    nitrogen: 0.02,
+    carbon_dioxide: 0.06,
+    ethane: 0.08,
+    propane: 0.03,
+    isobutane: 0.001_5,
+    n_butane: 0.003,
+    isopentane: 0.000_5,
+    n_pentane: 0.001_65,
+    hexane: 0.002_15,
+    heptane: 0.000_88,
+    octane: 0.000_24,
+    nonane: 0.000_15,
+    decane: 0.000_09,
+    hydrogen: 0.004,
+    oxygen: 0.005,
+    carbon_monoxide: 0.002,
+    water: 0.000_1,
+    hydrogen_sulfide: 0.002_5,
+    helium: 0.007,
+    argon: 0.001,
+};
+
+const COMP_PARTIAL: Composition = Composition {
+    methane: 0.965,
+    nitrogen: 0.003,
+    carbon_dioxide: 0.006,
+    ethane: 0.018,
+    propane: 0.004_5,
+    isobutane: 0.001,
+    n_butane: 0.001,
+    isopentane: 0.000_5,
+    n_pentane: 0.000_3,
+    hexane: 0.000_7,
+    heptane: 0.0,
+    octane: 0.0,
+    nonane: 0.0,
+    decane: 0.0,
+    hydrogen: 0.0,
+    oxygen: 0.0,
+    carbon_monoxide: 0.0,
+    water: 0.0,
+    hydrogen_sulfide: 0.0,
+    helium: 0.0,
+    argon: 0.0,
+};
 
 fn bench_detail_new(c: &mut Criterion) {
     c.bench_function("Detail_new", |b| {
@@ -47,10 +98,8 @@ fn bench_detail_properties(c: &mut Criterion) {
 
 fn bench_gerg_density(c: &mut Criterion) {
     let mut gerg_test: Gerg2008 = Gerg2008::new();
-    gerg_test.x = [
-        0.0, 0.77824, 0.02, 0.06, 0.08, 0.03, 0.0015, 0.003, 0.0005, 0.00165, 0.00215, 0.00088,
-        0.00024, 0.00015, 0.00009, 0.004, 0.005, 0.002, 0.0001, 0.0025, 0.007, 0.001,
-    ];
+
+    gerg_test.set_composition(&COMP_FULL).unwrap();
     gerg_test.molar_mass();
     gerg_test.t = 400.0;
     gerg_test.p = 50000.0;
@@ -65,10 +114,8 @@ fn bench_gerg_density(c: &mut Criterion) {
 
 fn bench_gerg_properties(c: &mut Criterion) {
     let mut gerg_test: Gerg2008 = Gerg2008::new();
-    gerg_test.x = [
-        0.0, 0.77824, 0.02, 0.06, 0.08, 0.03, 0.0015, 0.003, 0.0005, 0.00165, 0.00215, 0.00088,
-        0.00024, 0.00015, 0.00009, 0.004, 0.005, 0.002, 0.0001, 0.0025, 0.007, 0.001,
-    ];
+
+    gerg_test.set_composition(&COMP_FULL).unwrap();
     gerg_test.molar_mass();
     gerg_test.t = 400.0;
     gerg_test.p = 50000.0;

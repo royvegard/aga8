@@ -105,13 +105,12 @@ pub struct Gerg2008 {
     /// Isentropic Exponent
     pub kappa: f64,
     /// Composition in mole fractions
-    pub x: [f64; NC_GERG + 1],
+    x: [f64; NC_GERG + 1],
 
-    drold: f64,
-    trold: f64,
+    dr: f64,
+    tr: f64,
     told: f64,
     trold2: f64,
-    xold: [f64; NC_GERG + 1],
     a: f64,
     a0: [f64; 3],
     ar: [[f64; 4]; 4],
@@ -155,6 +154,8 @@ impl Gerg2008 {
         self.x[19] = comp.hydrogen_sulfide;
         self.x[20] = comp.helium;
         self.x[21] = comp.argon;
+
+        (self.dr, self.tr) = self.reducingparameters();
 
         Ok(())
     }
@@ -330,18 +331,7 @@ impl Gerg2008 {
         let mut vr: f64 = 0.0;
         let mut xij: f64;
         let mut f: f64;
-        let mut icheck: i32 = 0;
 
-        // Check to see if a component fraction has changed.  If x is the same as the previous call, then exit.
-        for i in 1..=NC_GERG {
-            if (self.x[i] - self.xold[i]).abs() > 0.000_000_1 {
-                icheck = 1;
-            }
-            self.xold[i] = self.x[i];
-        }
-        if icheck == 0 {
-            return (self.drold, self.trold);
-        }
         self.told = 0.0;
         self.trold2 = 0.0;
 
@@ -362,8 +352,6 @@ impl Gerg2008 {
         if vr > EPSILON {
             dr = 1.0 / vr;
         }
-        self.drold = dr;
-        self.trold = tr;
         (dr, tr)
     }
 
@@ -442,9 +430,8 @@ impl Gerg2008 {
         }
 
         //Set up del, tau, log(tau), and the first 7 calculations for del^i
-        let (dr, tr) = self.reducingparameters();
-        let del = self.d / dr;
-        let tau = tr / self.t;
+        let del = self.d / self.dr;
+        let tau = self.tr / self.t;
         let lntau = tau.ln();
         delp[1] = del;
         expd[1] = (-delp[1]).exp();
@@ -454,11 +441,11 @@ impl Gerg2008 {
         }
 
         // If temperature has changed, calculate temperature dependent parts
-        if (self.t - self.told).abs() > 0.000_000_1 || (tr - self.trold2).abs() > 0.000_000_1 {
+        if (self.t - self.told).abs() > 0.000_000_1 || (self.tr - self.trold2).abs() > 0.000_000_1 {
             self.tterms(lntau);
         }
         self.told = self.t;
-        self.trold2 = tr;
+        self.trold2 = self.tr;
 
         // Calculate pure fluid contributions
         for i in 1..=NC_GERG {
