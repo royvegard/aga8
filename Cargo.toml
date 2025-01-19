@@ -21,10 +21,9 @@ OriginalFilename = "aga8.dll"
 name = "aga8"
 crate-type = ["rlib", "staticlib", "cdylib"]
 
-[profile.release]
-strip = true
-opt-level = "z"
-lto = true
+[profile.bench]
+debug = 2
+opt-level = 3
 
 [dependencies]
 
@@ -39,4 +38,4 @@ harness = false
 
 [build-dependencies]
 winres = "0.1"
-cbindgen = "0.26"
+cbindgen = "0.28"
