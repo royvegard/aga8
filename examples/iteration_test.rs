@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 use aga8::composition::Composition;
 use aga8::{gerg2008::Gerg2008, DensityError};
 use rand::prelude::*;
@@ -55,20 +57,22 @@ const COMP_PARTIAL: Composition = Composition {
 fn main() {
     let mut gerg_test: Gerg2008 = Gerg2008::new();
 
-    gerg_test.set_composition(&COMP_PARTIAL).unwrap();
+    gerg_test.set_composition(&COMP_FULL).unwrap();
 
     gerg_test.molar_mass();
 
     let file = OpenOptions::new()
-        .append(true)
-        .create_new(true)
+        .write(true)
+        .create(true)
+        .truncate(true)
         .open("data.csv")
         .unwrap();
     let mut writer = BufWriter::new(file);
 
     let file_2 = OpenOptions::new()
-        .append(true)
+        .write(true)
         .create(true)
+        .truncate(true)
         .open("data_2.csv")
         .unwrap();
     let mut writer_2 = BufWriter::new(file_2);
@@ -76,7 +80,7 @@ fn main() {
     writeln!(writer, "# Temperature, Pressure, MolarConsentration").unwrap();
 
     let mut rng = thread_rng();
-    let iterations = 250_000;
+    let iterations = 50_000;
     for i in 0..iterations {
         if (i % 10_000) == 0 {
             writer.flush().unwrap();
@@ -84,9 +88,9 @@ fn main() {
             println!("{}% flush", i * 100 / iterations);
         }
 
-        gerg_test.p = rng.gen_range(1.0..20_000.0);
-        gerg_test.t = rng.gen_range(90.0..200.0);
-        let e = gerg_test.density(0);
+        gerg_test.p = rng.gen_range(10.0..20_000.0);
+        gerg_test.t = rng.gen_range(120.0..400.0);
+        let e = gerg_test.density(2);
         match e {
             Ok(_) | Err(DensityError::Ok) => {
                 writeln!(writer, "{}, {}, {}", gerg_test.t, gerg_test.p, gerg_test.d).unwrap()

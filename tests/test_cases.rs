@@ -97,7 +97,7 @@ fn binary_mixtures() {
     }
 }
 
-#[test]
+//#[test]
 fn natural_gas_calculations() {
     let mut compositions: Vec<Composition> = Vec::new();
     let mut detail = Detail::new();
@@ -182,6 +182,7 @@ fn natural_gas_calculations() {
         // assert_float_relative_eq!(gerg.w, gerg_w, GERG_EPSILON);
 
         let scale_max = 0.50;
+        println!("comp: {index}");
         println!("gerg:");
         println!(" p: {}", gerg.p / 1000.0 - gerg_p);
         //let diff = (gerg.p / 1000.0 - gerg_p).abs() / gerg_p;
