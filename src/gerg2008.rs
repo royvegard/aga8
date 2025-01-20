@@ -110,7 +110,6 @@ pub struct Gerg2008 {
     dr: f64,
     tr: f64,
     told: f64,
-    trold2: f64,
     a: f64,
     a0: [f64; 3],
     ar: [[f64; 4]; 4],
@@ -333,7 +332,6 @@ impl Gerg2008 {
         let mut f: f64;
 
         self.told = 0.0;
-        self.trold2 = 0.0;
 
         // Calculate reducing variables for T and D
         for i in 1..=NC_GERG {
@@ -441,11 +439,10 @@ impl Gerg2008 {
         }
 
         // If temperature has changed, calculate temperature dependent parts
-        if (self.t - self.told).abs() > 0.000_000_1 || (self.tr - self.trold2).abs() > 0.000_000_1 {
+        if (self.t - self.told).abs() > 0.000_000_1 {
             self.tterms(lntau);
         }
         self.told = self.t;
-        self.trold2 = self.tr;
 
         // Calculate pure fluid contributions
         for i in 1..=NC_GERG {

@@ -84,7 +84,46 @@ fn gerg_demo_example() {
 }
 
 #[test]
-fn gerg_test_01() {
+fn gerg_change_temperature() {
+    let mut gerg_test: Gerg2008 = Gerg2008::new();
+
+    gerg_test.set_composition(&COMP_FULL).unwrap();
+
+    gerg_test.t = 400.0;
+    gerg_test.p = 50000.0;
+
+    gerg_test.density(0).unwrap();
+    gerg_test.properties();
+
+    assert!(f64::abs(gerg_test.d - 12.798_286_260_820_62) < 1.0e-10);
+    assert!(f64::abs(gerg_test.mm - 20.542_744_501_6) < 1.0e-10);
+    assert!(f64::abs(gerg_test.z - 1.174_690_666_383_717) < 1.0e-10);
+    assert!(f64::abs(gerg_test.dp_dd - 7_000.694_030_193_327) < 1.0e-10);
+    assert!(f64::abs(gerg_test.d2p_dd2 - 1_129.526_655_214_841) < 1.0e-10);
+    assert!(f64::abs(gerg_test.dp_dt - 235.983_229_259_309_6) < 1.0e-10);
+    assert!(f64::abs(gerg_test.u - -2_746.492_901_212_53) < 1.0e-10);
+    assert!(f64::abs(gerg_test.h - 1_160.280_160_510_973) < 1.0e-10);
+    assert!(f64::abs(gerg_test.s - -38.575_903_924_090_89) < 1.0e-10);
+    assert!(f64::abs(gerg_test.cv - 39.029_482_181_563_72) < 1.0e-10);
+    assert!(f64::abs(gerg_test.cp - 58.455_220_510_003_66) < 1.0e-10);
+    assert!(f64::abs(gerg_test.w - 714.424_884_059_602_4) < 1.0e-10);
+    assert!(f64::abs(gerg_test.g - 16_590.641_730_147_33) < 1.0e-10);
+    assert!(f64::abs(gerg_test.jt - 7.155_629_581_480_913E-5) < 1.0e-10);
+    assert!(f64::abs(gerg_test.kappa - 2.683_820_255_058_032) < 1.0e-10);
+
+    gerg_test.t = 350.0;
+
+    gerg_test.density(0).unwrap();
+    gerg_test.properties();
+
+    println!("{}", gerg_test.z);
+    assert!(f64::abs(gerg_test.d - 14.687_295_425_741_453) < 1.0e-10);
+    assert!(f64::abs(gerg_test.mm - 20.542_744_501_6) < 1.0e-10);
+    assert!(f64::abs(gerg_test.z - 1.169_837_272_320_901) < 1.0e-10);
+}
+
+#[test]
+fn gerg_change_composition() {
     let mut gerg_test: Gerg2008 = Gerg2008::new();
 
     gerg_test.set_composition(&COMP_PARTIAL).unwrap();
@@ -95,12 +134,34 @@ fn gerg_test_01() {
     gerg_test.density(0).unwrap();
     gerg_test.properties();
 
-    println!("{}", gerg_test.d);
-    println!("{}", gerg_test.mm);
-    println!("{}", gerg_test.d * gerg_test.mm);
-
     assert!(f64::abs(gerg_test.d - 7.730_483_295_277_388) < 1.0e-10);
     assert!(f64::abs(gerg_test.mm - 16.803_030_286) < 1.0e-10);
+
+    // Change composition
+    gerg_test.set_composition(&COMP_FULL).unwrap();
+
+    gerg_test.t = 400.0;
+    gerg_test.p = 50000.0;
+
+    gerg_test.density(0).unwrap();
+    gerg_test.properties();
+
+    assert!(f64::abs(gerg_test.d - 12.798_286_260_820_62) < 1.0e-10);
+    assert!(f64::abs(gerg_test.mm - 20.542_744_501_6) < 1.0e-10);
+    assert!(f64::abs(gerg_test.p - 50_000.0) < 1.0e-10);
+    assert!(f64::abs(gerg_test.z - 1.174_690_666_383_717) < 1.0e-10);
+    assert!(f64::abs(gerg_test.dp_dd - 7_000.694_030_193_327) < 1.0e-10);
+    assert!(f64::abs(gerg_test.d2p_dd2 - 1_129.526_655_214_841) < 1.0e-10);
+    assert!(f64::abs(gerg_test.dp_dt - 235.983_229_259_309_6) < 1.0e-10);
+    assert!(f64::abs(gerg_test.u - -2_746.492_901_212_53) < 1.0e-10);
+    assert!(f64::abs(gerg_test.h - 1_160.280_160_510_973) < 1.0e-10);
+    assert!(f64::abs(gerg_test.s - -38.575_903_924_090_89) < 1.0e-10);
+    assert!(f64::abs(gerg_test.cv - 39.029_482_181_563_72) < 1.0e-10);
+    assert!(f64::abs(gerg_test.cp - 58.455_220_510_003_66) < 1.0e-10);
+    assert!(f64::abs(gerg_test.w - 714.424_884_059_602_4) < 1.0e-10);
+    assert!(f64::abs(gerg_test.g - 16_590.641_730_147_33) < 1.0e-10);
+    assert!(f64::abs(gerg_test.jt - 7.155_629_581_480_913E-5) < 1.0e-10);
+    assert!(f64::abs(gerg_test.kappa - 2.683_820_255_058_032) < 1.0e-10);
 }
 
 #[test]
