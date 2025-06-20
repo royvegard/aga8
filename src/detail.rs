@@ -653,7 +653,6 @@ const TH0I: [[f64; 7]; MAXFLDS] = [
 ///
 /// assert!((12.807_924_036_488_01 - aga8_test.d).abs() < 1.0e-10);
 /// ```
-
 pub struct Detail {
     // Calculated in the Pressure subroutine,
     // but not included as an argument since it

@@ -29,8 +29,8 @@ opt-level = 3
 
 [dev-dependencies]
 assert_float_eq = "1.1"
-criterion = "0.5.1"
-rand = "0.8.5"
+criterion = "0.6.0"
+rand = "0.9.1"
 
 [[bench]]
 name = "benchmarks"
@@ -38,4 +38,4 @@ harness = false
 
 [build-dependencies]
 winres = "0.1"
-cbindgen = "0.28"
+cbindgen = "0.29.0"

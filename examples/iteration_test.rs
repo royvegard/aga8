@@ -2,7 +2,7 @@
 
 use aga8::composition::Composition;
 use aga8::{gerg2008::Gerg2008, DensityError};
-use rand::prelude::*;
+use rand::{prelude::*, rng};
 use std::fs::OpenOptions;
 use std::io::{prelude::*, BufWriter};
 
@@ -79,7 +79,7 @@ fn main() {
 
     writeln!(writer, "# Temperature, Pressure, MolarConsentration").unwrap();
 
-    let mut rng = thread_rng();
+    let mut rng = rng();
     let iterations = 50_000;
     for i in 0..iterations {
         if (i % 10_000) == 0 {
@@ -88,8 +88,8 @@ fn main() {
             println!("{}% flush", i * 100 / iterations);
         }
 
-        gerg_test.p = rng.gen_range(10.0..20_000.0);
-        gerg_test.t = rng.gen_range(120.0..400.0);
+        gerg_test.p = rng.random_range(10.0..20_000.0);
+        gerg_test.t = rng.random_range(120.0..400.0);
         let e = gerg_test.density(2);
         match e {
             Ok(_) | Err(DensityError::Ok) => {
